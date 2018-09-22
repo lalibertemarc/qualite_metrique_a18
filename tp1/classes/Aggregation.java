@@ -1,3 +1,5 @@
+package packageModels;
+
 public class Aggregation {
 
 	private Role container;

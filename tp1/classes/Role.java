@@ -1,3 +1,5 @@
+package packageModels;
+
 public class Role {
 
 	private Class_dec class_dec;

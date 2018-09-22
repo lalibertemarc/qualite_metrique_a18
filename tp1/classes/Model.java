@@ -1,8 +1,13 @@
+package packageModels;
+
+
+import java.util.List;
+
 public class Model implements Modelable {
 
-	private string identifier;
+	private String identifier;
 	private List<Class_dec> list_dec;
-	private string details;
+	private String details;
 	private List<Association> associations;
 	private List<Aggregation> aggregations;
 
@@ -31,8 +36,28 @@ public class Model implements Modelable {
 	}
 
 	public Model() {
-		// TODO - implement Model.Model
-		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	@Override
+	public String getDetails() {
+		return details;
+	}
+
+	@Override
+	public void setIdentifier(String id) {
+		identifier=id;
+		
+	}
+
+	@Override
+	public void setDetails(String details) {
+		this.details=details;
+		
 	}
 
 }

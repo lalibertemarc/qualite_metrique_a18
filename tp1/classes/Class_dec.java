@@ -1,16 +1,20 @@
+package packageModels;
+
+import java.util.List;
+
 public class Class_dec implements Modelable {
 
-	private string identifier;
-	private List<Data_item> attributes;
+	private String identifier;
+	private List<Data_Item> attributes;
 	private List<Operation> operations;
-	private string details;
+	private String details;
 	private List<Class_dec> subclasses;
 
-	public List<Data_item> getAttributes() {
+	public List<Data_Item> getAttributes() {
 		return this.attributes;
 	}
 
-	public void setAttributes(List<Data_item> attributes) {
+	public void setAttributes(List<Data_Item> attributes) {
 		this.attributes = attributes;
 	}
 
@@ -41,8 +45,34 @@ public class Class_dec implements Modelable {
 	}
 
 	public Class_dec() {
-		// TODO - implement Class_dec.Class_dec
-		throw new UnsupportedOperationException();
+	
 	}
+	public void setSubClasses(List<Class_dec> list)
+	{
+		this.subclasses= list;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	@Override
+	public String getDetails() {
+		return details;
+	}
+
+	@Override
+	public void setIdentifier(String id) {
+		identifier=id;
+		
+	}
+
+	@Override
+	public void setDetails(String details) {
+		this.details=details;
+		
+	}
+
 
 }

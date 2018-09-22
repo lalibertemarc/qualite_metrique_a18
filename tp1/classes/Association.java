@@ -1,9 +1,10 @@
+package packageModels;
 public class Association implements Modelable {
 
 	private Role role1;
 	private Role role2;
-	private string identifier;
-	private string details;
+	private String identifier;
+	private String details;
 
 	public Role getRole1() {
 		return this.role1;
@@ -24,6 +25,29 @@ public class Association implements Modelable {
 	public Association() {
 		// TODO - implement Association.Association
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getIdentifier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDetails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setIdentifier(String id) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setDetails(String details) {
+		// TODO Auto-generated method stub
 	}
 
 }

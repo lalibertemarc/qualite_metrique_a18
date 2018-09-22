@@ -1,5 +1,7 @@
+package packageModels;
 public interface Returnable {
 
-	string getType();
-
+	String getType();
+	
+	void setType(String type);
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>testParsing</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/packageModels/Aggregation.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Aggregation.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Association.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Association.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Class_dec.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Class_dec.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Data_Item.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Data_Item.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Model.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Model.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Modelable.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Modelable.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Multiplicity.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Multiplicity.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Operation.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Operation.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Returnable.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Returnable.java</location>
+		</link>
+		<link>
+			<name>src/packageModels/Role.java</name>
+			<type>1</type>
+			<location>C:/Users/Propriétaire/Desktop/repos/qualite et metrique/tp1/classes/Role.java</location>
+		</link>
+	</linkedResources>
+</projectDescription>

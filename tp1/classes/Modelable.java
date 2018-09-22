@@ -1,7 +1,12 @@
+package packageModels;
+
 public interface Modelable {
 
-	string getIdentifier();
+	String getIdentifier();
 
-	string getDetails();
+	String getDetails();
 
+	void setIdentifier(String id);
+	
+	void setDetails(String details);
 }

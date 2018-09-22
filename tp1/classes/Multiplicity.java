@@ -1,3 +1,5 @@
+package packageModels;
+
 public enum Multiplicity {
 	ONE,
 	MANY,
