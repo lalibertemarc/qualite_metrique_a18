@@ -20,6 +20,7 @@ public class Launcher {
 		//System.out.println(file);
 		Model model  = Parser.getModel(file);
 		
+		PrinterHelper.printModel(model);
 	}
 
 }

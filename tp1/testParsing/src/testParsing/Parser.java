@@ -80,7 +80,6 @@ public class Parser {
 	private static List<Operation> getClassOperations(String id) {
 		List<Operation> output = new ArrayList<Operation>();
 		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS\\n((.+\\n)+)";
-		//System.out.println(regex);
 		Pattern classOperations = Pattern.compile(regex);
 		Matcher matcher = classOperations.matcher(_mainFile);
 		if(matcher.find())
@@ -93,12 +92,21 @@ public class Parser {
 				//System.out.println(item);
 				if(item.equals(";"))
 					continue;
-				String[] itemAr = item.split(":");
+				String regex2 = "(.*):(.*)";
+				Pattern opFinder =Pattern.compile(regex2);
+				Matcher opMatcher = opFinder.matcher(item);
 				
-				newOp.setIdentifier(itemAr[0].equals(";") ? "" : itemAr[0]+" : "+itemAr[1]);
-				newOp.setType(itemAr[0].equals(";") ? "" : itemAr[itemAr.length-1]);
-				newOp.setArg_list(getOpArgs(itemAr[0]+":"+itemAr[1]));
-				newOp.setDetails(opAr[i]);
+				String name ="";
+				String type = "";
+				if(opMatcher.find())
+				{
+					name = opMatcher.group(1);
+					type = opMatcher.group(2);
+				}
+				newOp.setArg_list(getOpArgs(name));
+				newOp.setIdentifier(name);
+				newOp.setDetails(item);
+				newOp.setType(type);
 				output.add(newOp);
 			}
 			
@@ -132,13 +140,11 @@ public class Parser {
 	private static List<Data_Item> getClassAttribues(String id) {
 		List<Data_Item> output = new ArrayList<Data_Item>();
 		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS";
-		//System.out.println(regex);
 		Pattern classAttributes = Pattern.compile(regex);
 		Matcher matcher = classAttributes.matcher(_mainFile);
 		
 		if(matcher.find())
 		{
-			//System.out.println(matcher.group(1));
 			String[] datAr = matcher.group(1).split("\n");
 			for(int i=0;i<datAr.length;i++)
 			{
@@ -160,7 +166,7 @@ public class Parser {
 		String[] itemAr = input.split(":");
 		attribute.setIdentifier(itemAr[0]);
 		attribute.setType(itemAr[1].replaceAll(",",""));
-		
+		attribute.setDetails(itemAr[0] + " : "+itemAr[1].replaceAll(",",""));
 		return attribute;
 	}
 	
