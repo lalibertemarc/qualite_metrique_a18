@@ -23,31 +23,28 @@ public class Association implements Modelable {
 	}
 
 	public Association() {
-		// TODO - implement Association.Association
-		throw new UnsupportedOperationException();
+
 	}
 
 	@Override
 	public String getIdentifier() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.identifier;
 	}
 
 	@Override
 	public String getDetails() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.details;
 	}
 
 
 	@Override
 	public void setIdentifier(String id) {
-		// TODO Auto-generated method stub
+		this.identifier = id;
 	}
 
 	@Override
 	public void setDetails(String details) {
-		// TODO Auto-generated method stub
+		this.details = details;
 	}
 
 }

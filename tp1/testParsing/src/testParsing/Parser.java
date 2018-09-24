@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import packageModels.Association;
 import packageModels.Class_dec;
 import packageModels.Data_Item;
 import packageModels.Model;
+import packageModels.Multiplicity;
 import packageModels.Operation;
+import packageModels.Role;
 
 public class Parser {
 	static String _mainFile;
@@ -26,6 +29,7 @@ public class Parser {
 		
 		outputModel.setIdentifier(getModelId());
 		outputModel.setList_dec(getClasses());
+		outputModel.setAssociations(getAssociations());
 		
 		return outputModel;
 	}
@@ -128,7 +132,6 @@ public class Parser {
 			String[] datAr = matcher.group(1).split(",");
 			for(int i=0;i<datAr.length;i++)
 			{
-				
 				String item = datAr[i].replaceAll("\\s+","");
 				Data_Item attribute = getDataItem(item);
 				output.add(attribute);
@@ -148,7 +151,6 @@ public class Parser {
 			String[] datAr = matcher.group(1).split("\n");
 			for(int i=0;i<datAr.length;i++)
 			{
-				
 				String item = datAr[i].replaceAll("\\s+","");
 				Data_Item attribute = getDataItem(item);
 				output.add(attribute);
@@ -178,13 +180,67 @@ public class Parser {
 		String details = "";
 		
 		if(matcher.find())
-		{
 			details = matcher.group();
-		}
-		
-		return details;
-		
+
+		return details;	
 	}
 	
+	private static List<Association> getAssociations()
+	{
+		String regex = "RELATION (.*)\\n(.*)\\n(.*)\\n(.*)\\n";
+		Pattern assoPattern = Pattern.compile(regex);
+		Matcher matcher = assoPattern.matcher(_mainFile);
+		List<Association> output = new ArrayList<Association>();
+		
+		while(matcher.find())
+		{
+			Association newAsso = new Association();
+			newAsso.setIdentifier(matcher.group(1));
+			newAsso.setRole1(getRole(matcher.group(3)));
+			newAsso.setRole2(getRole(matcher.group(4)));
+			newAsso.setDetails(matcher.group());
+			output.add(newAsso);
+		}
+		
+		return output;
+	}
+	
+	private static Role getRole(String input)
+	{
+		String regex = "CLASS (.*) (.*)";
+		Pattern rolePattern = Pattern.compile(regex);
+		Matcher matcher = rolePattern.matcher(input);
+		
+		Role role = null;
+		if(matcher.find())
+		{
+			role = new Role();
+			role.setClass_dec(matcher.group(1));
+			role.setMultiplicity(getMultiplicity(matcher.group(2).replaceAll(",","")));
+		}
+		return role;
+	}
 
+	
+	private static Multiplicity getMultiplicity(String input) {
+		
+		switch(input)
+		{
+		case "ONE":
+			return Multiplicity.ONE;
+		case "MANY":
+			return Multiplicity.MANY;
+		case "ONE_OR_MANY":
+			return Multiplicity.ONE_OR_MANY;
+		case "OPTIONALLY_ONE":
+			return Multiplicity.OPTIONALLY_ONE;
+		case "UNDEFINED":
+			return Multiplicity.UNDEFINED;
+		default:
+			return null;
+		}
+	}
+	
+	
+	
 }

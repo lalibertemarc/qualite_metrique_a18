@@ -2,14 +2,14 @@ package packageModels;
 
 public class Role {
 
-	private Class_dec class_dec;
+	private String class_dec;
 	private Multiplicity multiplicity;
 
-	public Class_dec getClass_dec() {
+	public String getClass_dec() {
 		return this.class_dec;
 	}
 
-	public void setClass_dec(Class_dec class_dec) {
+	public void setClass_dec(String class_dec) {
 		this.class_dec = class_dec;
 	}
 
@@ -22,8 +22,6 @@ public class Role {
 	}
 
 	public Role() {
-		// TODO - implement Role.Role
-		throw new UnsupportedOperationException();
 	}
 
 }

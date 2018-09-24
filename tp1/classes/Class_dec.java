@@ -5,9 +5,9 @@ import java.util.List;
 public class Class_dec implements Modelable {
 
 	private String identifier;
+	private String details;
 	private List<Data_Item> attributes;
 	private List<Operation> operations;
-	private String details;
 	private List<Class_dec> subclasses;
 
 	public List<Data_Item> getAttributes() {

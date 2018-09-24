@@ -2,6 +2,8 @@ package testParsing;
 
 import java.util.List;
 
+import packageModels.Aggregation;
+import packageModels.Association;
 import packageModels.Class_dec;
 import packageModels.Data_Item;
 import packageModels.Model;
@@ -18,8 +20,11 @@ public class PrinterHelper {
 		//System.out.println("MODEL Details: "+m.getDetails());
 		
 		printClasses(m.getList_dec());
+		printAssociation(m.getAssociations());
 	}
 	
+
+
 	private static void printClasses(List<Class_dec> l)
 	{
 		for(int i=0;i<l.size();i++)
@@ -77,6 +82,20 @@ public class PrinterHelper {
 			System.out.println("");
 		
 		}
+	}
+	
+	private static void printAssociation(List<Association> l) {
+		System.out.println("Associations");
+		for(int i=0;i<l.size();i++)
+		{
+			System.out.println("Asso name: "+l.get(i).getIdentifier());
+			System.out.println("Asso details: "+l.get(i).getDetails());
+			System.out.println("Asso role1 : "+l.get(i).getRole1().getClass_dec()+" : "+l.get(i).getRole1().getMultiplicity());
+			System.out.println("Asso role2 : "+l.get(i).getRole2().getClass_dec()+" : "+l.get(i).getRole2().getMultiplicity());
+			System.out.println("");
+		
+		}
+		
 	}
 
 }

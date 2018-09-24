@@ -6,8 +6,8 @@ import java.util.List;
 public class Model implements Modelable {
 
 	private String identifier;
-	private List<Class_dec> list_dec;
 	private String details;
+	private List<Class_dec> list_dec;
 	private List<Association> associations;
 	private List<Aggregation> aggregations;
 

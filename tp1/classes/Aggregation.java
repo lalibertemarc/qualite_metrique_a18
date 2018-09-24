@@ -22,8 +22,7 @@ public class Aggregation {
 	}
 
 	public Aggregation() {
-		// TODO - implement Aggregation.Aggregation
-		throw new UnsupportedOperationException();
+		
 	}
 
 }
