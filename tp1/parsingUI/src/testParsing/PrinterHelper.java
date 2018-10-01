@@ -16,6 +16,11 @@ public class PrinterHelper {
 	
 	public static void printModel(Model m)
 	{
+		if(m== null) {
+			System.out.println("FILE is corrupted");
+			return;
+		}
+			
 		System.out.println("MODEL Name: "+m.getIdentifier());
 		System.out.println("");
 		//System.out.println("MODEL Details: "+m.getDetails());
@@ -23,6 +28,7 @@ public class PrinterHelper {
 		printClasses(m.getList_dec());
 		printAssociation(m.getAssociations());
 		printAggregation(m.getAggregations());
+		//System.out.println(m.getDetails());
 	}
 	
 
@@ -36,6 +42,7 @@ public class PrinterHelper {
 			System.out.println("");
 			printOperations(l.get(i).getOperations());
 			System.out.println("Class Details:\n"+l.get(i).getDetails());
+			System.out.println("\n");
 			
 		}
 	}
@@ -48,7 +55,7 @@ public class PrinterHelper {
 			System.out.println("ATT name: "+l.get(i).getIdentifier());
 			System.out.println("ATT type: "+l.get(i).getType());
 			System.out.println("ATT details: "+l.get(i).getDetails());
-			System.out.println("");
+			System.out.println("\n");
 		
 		}
 	}

@@ -18,44 +18,64 @@ public class Parser {
 	static String _mainFile;
 	static boolean isFileCorrupt;
 	
-	static Pattern modelPattern = Pattern.compile("MODEL (.*)\n");
 	static Pattern classPattern = Pattern.compile("CLASS (.*)\n");
 	
 	
 	public static Model getModel(String input)
 	{
+		if(input.length()==0){
+			return null;
+		}
 		_mainFile = input;
 		Model outputModel = new Model();
-		outputModel.setDetails(_mainFile);
 		
+	
 		outputModel.setIdentifier(getModelId());
-		outputModel.setList_dec(getClasses());
-		outputModel.setAssociations(getAssociations());
-		outputModel.setAggregations(getAggregations());
+		if(!isFileCorrupt)
+			outputModel.setDetails(_mainFile);
+		else
+			return null;
+		if(!isFileCorrupt)
+			outputModel.setList_dec(getClasses());
+		else
+			return null;
+		if(!isFileCorrupt)
+			outputModel.setAssociations(getAssociations());
+		else
+			return null;
+		if(!isFileCorrupt)
+			outputModel.setAggregations(getAggregations());
+		else
+			return null;
 		
 		return outputModel;
 	}
 
-	
 
-	private static void checkForCorruption(String input)
-	{
-		if(input.equals(""))
-			isFileCorrupt=true;
-		else
-			isFileCorrupt=false;
-			
-	}
-	
 	private static String getModelId() {
+		Pattern modelPattern = Pattern.compile("MODEL (.*)\n");
 		Matcher matcher = modelPattern.matcher(_mainFile);
 		String id = "";
 		while(matcher.find())
         {
+			/*Couvre les cas suivants:
+			 * si on a plus que 2 noms
+			 * si le nom est vide
+			 * 
+			 * */
+			if(matcher.group().length()<1 || !id.equals("") || matcher.group(1).equals(""))
+			{
+				isFileCorrupt = true;
+				return null;
+			}
+			
             id=matcher.group(1);
         }
-		
-		checkForCorruption(id);
+		if(id.equals(""))
+		{
+			isFileCorrupt = true;
+			return null;
+		}
 		return id;
 	}
 	
@@ -73,6 +93,11 @@ public class Parser {
 				continue;
 			Class_dec newClass = new Class_dec();
 			String id= idAr[0];
+			if(id.equals(""))
+			{
+				isFileCorrupt = true;
+				return null;
+			}
 			newClass.setIdentifier(id);
 			newClass.setDetails(getClassDetail(id));
 			newClass.setAttributes(getClassAttribues(id));
@@ -82,6 +107,12 @@ public class Parser {
           
         }
 		
+		//no classes
+		if(output.size()==0)
+		{
+			isFileCorrupt = true;
+			return null;
+		}
 		return output;
 	}
 	
@@ -110,6 +141,12 @@ public class Parser {
 				{
 					name = opMatcher.group(1);
 					type = opMatcher.group(2);
+				}
+				
+				if(name.equals("") || type.equals(""))
+				{
+					isFileCorrupt = true;
+					return null;
 				}
 				newOp.setArg_list(getOpArgs(name));
 				newOp.setIdentifier(name);
