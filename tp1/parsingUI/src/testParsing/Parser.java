@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import packageModels.Aggregation;
 import packageModels.Association;
 import packageModels.Class_dec;
 import packageModels.Data_Item;
@@ -30,9 +31,12 @@ public class Parser {
 		outputModel.setIdentifier(getModelId());
 		outputModel.setList_dec(getClasses());
 		outputModel.setAssociations(getAssociations());
+		outputModel.setAggregations(getAggregations());
 		
 		return outputModel;
 	}
+
+	
 
 	private static void checkForCorruption(String input)
 	{
@@ -241,6 +245,21 @@ public class Parser {
 		}
 	}
 	
-	
+	private static List<Aggregation> getAggregations() {
+		String regex = "AGGREGATION (.*)\\n(.*)\\n(.*)\\n(.*)\\n(.*)\\n;";
+		Pattern aggPattern = Pattern.compile(regex);
+		Matcher matcher = aggPattern.matcher(_mainFile);
+		List<Aggregation> output = new ArrayList<Aggregation>();
+		
+		while(matcher.find())
+		{
+			Aggregation aggregation = new Aggregation();
+			aggregation.setContainer(getRole(matcher.group(3)));
+			aggregation.setParts(getRole(matcher.group(5)));
+			output.add(aggregation);
+		}
+		
+		return output;
+	}
 	
 }

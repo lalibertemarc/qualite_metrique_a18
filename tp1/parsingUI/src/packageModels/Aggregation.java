@@ -1,6 +1,6 @@
 package packageModels;
 
-public class Aggregation {
+public class Aggregation{
 
 	private Role container;
 	private Role parts;
@@ -24,5 +24,6 @@ public class Aggregation {
 	public Aggregation() {
 		
 	}
+
 
 }

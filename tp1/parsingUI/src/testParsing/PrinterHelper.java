@@ -8,6 +8,7 @@ import packageModels.Class_dec;
 import packageModels.Data_Item;
 import packageModels.Model;
 import packageModels.Operation;
+import packageModels.Role;
 
 
 
@@ -21,9 +22,9 @@ public class PrinterHelper {
 		
 		printClasses(m.getList_dec());
 		printAssociation(m.getAssociations());
+		printAggregation(m.getAggregations());
 	}
 	
-
 
 	private static void printClasses(List<Class_dec> l)
 	{
@@ -84,7 +85,8 @@ public class PrinterHelper {
 		}
 	}
 	
-	private static void printAssociation(List<Association> l) {
+	private static void printAssociation(List<Association> l) 
+	{
 		System.out.println("Associations");
 		for(int i=0;i<l.size();i++)
 		{
@@ -92,10 +94,28 @@ public class PrinterHelper {
 			System.out.println("Asso details: "+l.get(i).getDetails());
 			System.out.println("Asso role1 : "+l.get(i).getRole1().getClass_dec()+" : "+l.get(i).getRole1().getMultiplicity());
 			System.out.println("Asso role2 : "+l.get(i).getRole2().getClass_dec()+" : "+l.get(i).getRole2().getMultiplicity());
-			System.out.println("");
-		
+			System.out.println("");	
+		}
+	
+	}
+	
+	private static void printAggregation(List<Aggregation> l) {
+		System.out.println("Aggregations");
+		for(int i=0;i<l.size();i++)
+		{
+			System.out.println("CONTAINER");
+			Role container = l.get(i).getContainer();
+			System.out.println(container.getClass_dec());
+			System.out.println(container.getMultiplicity());
+			System.out.println("Parts");
+			Role parts = l.get(i).getParts();
+			System.out.println(parts.getClass_dec());
+			System.out.println(parts.getMultiplicity());
 		}
 		
 	}
+	
+	
+	
 
 }
