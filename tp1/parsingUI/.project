@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/parser</name>
+			<type>2</type>
+			<location>/Users/mlaliberte/Documents/personnel/qualiteMetrique/tp1/testParsing/src/testParsing</location>
+		</link>
+	</linkedResources>
 </projectDescription>
