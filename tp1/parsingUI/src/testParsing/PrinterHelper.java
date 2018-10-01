@@ -41,12 +41,29 @@ public class PrinterHelper {
 			printAttributes(l.get(i).getAttributes());
 			System.out.println("");
 			printOperations(l.get(i).getOperations());
+			printSubclasses(l.get(i).getSubclasses());
 			System.out.println("Class Details:\n"+l.get(i).getDetails());
 			System.out.println("\n");
 			
 		}
 	}
 	
+	private static void printSubclasses(List<String> l) {
+		System.out.println("SUBCLASSES");
+		if(l==null)
+		{
+			System.out.println("NO SUBCLASSES");
+			System.out.println("");
+			return;
+		}
+		for(int i=0;i<l.size();i++)
+		{
+			System.out.println(l.get(i));
+		}
+		System.out.println("");
+	}
+
+
 	private static void printAttributes(List<Data_Item> l)
 	{
 		System.out.println("ATTRIBUTES");

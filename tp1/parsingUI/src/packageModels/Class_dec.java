@@ -8,7 +8,7 @@ public class Class_dec implements Modelable {
 	private String details;
 	private List<Data_Item> attributes;
 	private List<Operation> operations;
-	private List<Class_dec> subclasses;
+	private List<String> subclasses;
 
 	public List<Data_Item> getAttributes() {
 		return this.attributes;
@@ -26,11 +26,11 @@ public class Class_dec implements Modelable {
 		this.operations = operations;
 	}
 
-	public List<Class_dec> getSubclasses() {
+	public List<String> getSubclasses() {
 		return this.subclasses;
 	}
 
-	public void setSubclasses(List<Class_dec> subclasses) {
+	public void setSubclasses(List<String> subclasses) {
 		this.subclasses = subclasses;
 	}
 
@@ -46,10 +46,6 @@ public class Class_dec implements Modelable {
 
 	public Class_dec() {
 	
-	}
-	public void setSubClasses(List<Class_dec> list)
-	{
-		this.subclasses= list;
 	}
 
 	@Override

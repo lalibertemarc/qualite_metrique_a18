@@ -34,11 +34,11 @@ ATTRIBUTES
       nom : String,
       adresse : String
 OPERATIONS
-      Utilise_par(eq : Equipe, annee : Integer) : Boolean
+      Utilise_par(eq : Equipe, annee : Integer) :
 ;
 
 GENERALIZATION Participant
-	SUBCLASSES Joueur, Entraineur
+	SUBCLASSES Joueur, Entraineur, Stade
 ;
 
 RELATION est_localisee_a 

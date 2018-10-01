@@ -17,9 +17,7 @@ import packageModels.Role;
 public class Parser {
 	static String _mainFile;
 	static boolean isFileCorrupt;
-	
-	static Pattern classPattern = Pattern.compile("CLASS (.*)\n");
-	
+
 	
 	public static Model getModel(String input)
 	{
@@ -82,10 +80,15 @@ public class Parser {
 	private static List<Class_dec> getClasses()
 	{
 		List<Class_dec> output = new ArrayList<Class_dec>();
-		
+		Pattern classPattern = Pattern.compile("CLASS (.*)\n");
 		Matcher matcher = classPattern.matcher(_mainFile);
 		while(matcher.find())
         {
+			if(matcher.group(1).equals(""))
+			{
+				isFileCorrupt = true;
+				return null;
+			}
 			
 			String match = matcher.group(1);
 			String[] idAr = match.split(" ");
@@ -93,15 +96,13 @@ public class Parser {
 				continue;
 			Class_dec newClass = new Class_dec();
 			String id= idAr[0];
-			if(id.equals(""))
-			{
-				isFileCorrupt = true;
-				return null;
-			}
+			
 			newClass.setIdentifier(id);
 			newClass.setDetails(getClassDetail(id));
-			newClass.setAttributes(getClassAttribues(id));
+			newClass.setAttributes(getClassAttributes(id));
 			newClass.setOperations(getClassOperations(id));
+			newClass.setSubclasses(getSubclasses(id));
+			
 			
 			output.add(newClass);
           
@@ -113,6 +114,55 @@ public class Parser {
 			isFileCorrupt = true;
 			return null;
 		}
+		return output;
+	}
+	
+	private static List<String> getSubclasses(String id) {
+		List<String> output = new ArrayList<String>();
+		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES (.*)\\n;";
+		Pattern subClassesPatt = Pattern.compile(regex);
+		Matcher matcher = subClassesPatt.matcher(_mainFile);
+		
+		while(matcher.find())
+		{
+			if(matcher.group(2).equals(""))
+			{
+				isFileCorrupt = true;
+				return null;
+			}
+			String[] classes = matcher.group(2).split(", ");
+			for(int i = 0 ;i<classes.length;i++)
+			{
+				//TODO
+				//check if classes are declared in file
+				output.add(classes[i]);
+			}
+		}
+		
+		if(output.size()==0)
+			return null;
+		return output;
+	}
+
+
+	private static List<Data_Item> getClassAttributes(String id) {
+		List<Data_Item> output = new ArrayList<Data_Item>();
+		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS";
+		Pattern classAttributes = Pattern.compile(regex);
+		Matcher matcher = classAttributes.matcher(_mainFile);
+		
+		if(matcher.find())
+		{
+			String[] datAr = matcher.group(1).split("\n");
+			for(int i=0;i<datAr.length;i++)
+			{
+				String item = datAr[i].replaceAll("\\s+","");
+				Data_Item attribute = getDataItem(item);
+				output.add(attribute);
+			}
+			
+		}
+		
 		return output;
 	}
 	
@@ -128,7 +178,7 @@ public class Parser {
 			{
 				Operation newOp = new Operation();
 				String item = opAr[i].replaceAll("\\s+","");
-				//System.out.println(item);
+				
 				if(item.equals(";"))
 					continue;
 				String regex2 = "(.*):(.*)";
@@ -181,32 +231,19 @@ public class Parser {
 		return output;
 	}
 
-	private static List<Data_Item> getClassAttribues(String id) {
-		List<Data_Item> output = new ArrayList<Data_Item>();
-		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS";
-		Pattern classAttributes = Pattern.compile(regex);
-		Matcher matcher = classAttributes.matcher(_mainFile);
-		
-		if(matcher.find())
-		{
-			String[] datAr = matcher.group(1).split("\n");
-			for(int i=0;i<datAr.length;i++)
-			{
-				String item = datAr[i].replaceAll("\\s+","");
-				Data_Item attribute = getDataItem(item);
-				output.add(attribute);
-			}
-			
-		}
-		
-		return output;
-	}
+	
 
 	
 	private static Data_Item getDataItem(String input)
 	{
 		Data_Item attribute = new Data_Item();
 		String[] itemAr = input.split(":");
+		
+		if(itemAr.length<2 || itemAr[0].equals("") || itemAr[1].equals(""))
+		{
+			isFileCorrupt = true;
+			return null;
+		}
 		attribute.setIdentifier(itemAr[0]);
 		attribute.setType(itemAr[1].replaceAll(",",""));
 		attribute.setDetails(itemAr[0] + " : "+itemAr[1].replaceAll(",",""));
@@ -256,8 +293,21 @@ public class Parser {
 		if(matcher.find())
 		{
 			role = new Role();
-			role.setClass_dec(matcher.group(1));
-			role.setMultiplicity(getMultiplicity(matcher.group(2).replaceAll(",","")));
+			String classdec = matcher.group(1);
+			if(classdec.equals("") || classdec==null)
+			{
+				isFileCorrupt = true;
+				return null;
+			}
+			role.setClass_dec(classdec);
+			
+			Multiplicity mul = getMultiplicity(matcher.group(2).replaceAll(",",""));
+			if(mul==null)
+			{
+				isFileCorrupt = true;
+				return null;
+			}
+			role.setMultiplicity(mul);
 		}
 		return role;
 	}
@@ -291,6 +341,9 @@ public class Parser {
 		while(matcher.find())
 		{
 			Aggregation aggregation = new Aggregation();
+			Role container = getRole(matcher.group(3));
+			Role parts = getRole(matcher.group(5));
+			
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
 			output.add(aggregation);
