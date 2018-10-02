@@ -1,13 +1,19 @@
 package parsingUI;
 
 import java.awt.*;
-//import java.awt.event.*;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+
+import testParsing.Launcher;
 
 
-public class ParsInterface extends JFrame{
+
+
+public class ParsInterface extends JFrame implements ActionListener{
 	
 	private JPanel containerNorth = new JPanel();
 	private JPanel containerGrid = new JPanel();
@@ -22,13 +28,17 @@ public class ParsInterface extends JFrame{
 	private PanelContainer sousClasses = new PanelContainer("sous_Classes");
 	private PanelContainer operations = new PanelContainer("Associations/Agrégation");
 	private JButton selectFile = new JButton("Charger fichier");
+	private JButton browse = new JButton("Parcourir");
 	private JPanel container4 = new JPanel();
 	private JTextArea details = new JTextArea();
 	private Border border;
 	private TitledBorder title;
+	int compteur;
 	
 
 	public ParsInterface(){	
+		
+		//this.chooseFile();
 		//basic appearance of a frame
 		this.setTitle("Parseur");
 		this.setSize(1000, 1000);
@@ -38,11 +48,14 @@ public class ParsInterface extends JFrame{
 		 
 		//set the 
 		selectFile.setPreferredSize(new Dimension(200, 50));
+		browse.setPreferredSize(new Dimension(100, 50));
+		
 		file.setBorder(BorderFactory.createLineBorder(Color.black));
 		containerNorth.setLayout(new BorderLayout(10,10));
 		containerNorth.setPreferredSize(new Dimension(900, 100));
 		containerNorth.add(selectFile, BorderLayout.WEST);
-		containerNorth.add(file);
+		containerNorth.add(file, BorderLayout.CENTER);
+		containerNorth.add(browse, BorderLayout.EAST);
 		containerNorth.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.getContentPane().add(containerNorth, BorderLayout.NORTH);
 		
@@ -98,6 +111,47 @@ public class ParsInterface extends JFrame{
 		this.getContentPane().add(containerGrid, BorderLayout.CENTER);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       
 		this.setVisible(true);
+		
+		selectFile.addActionListener(this);
+		browse.addActionListener(this);
+		
 	}
+
+	@Override
+	public void actionPerformed(java.awt.event.ActionEvent arg0) {
+		if(arg0.getSource() == this.browse) {
+			file.setText(chooseFile());
+		}
+		if(arg0.getSource() == this.selectFile) {
+			if(file.getText().trim().length()>0) {
+				System.out.println("maintenant faut le passer a launcher ");
+				}
+			else if(file.getText().trim().length()<=0) {
+				JOptionPane jop = new JOptionPane();
+				jop.showMessageDialog(null, "Veuillez choisir un fichier", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
+			
+		}
+		else {
+			
+			
+		}
+	}
+	
+	//open a window dialog
+	public String chooseFile() {
+		FileSystemView openSystem = FileSystemView.getFileSystemView(); 
+		java.io.File defaut = openSystem.getDefaultDirectory();  
+		JFileChooser defautChooser = new JFileChooser(defaut); 
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			    "allowedFiles", "txt", "ucd");
+		defautChooser.addChoosableFileFilter(filter);
+		defautChooser.showOpenDialog(getParent());
+		java.io.File fc = defautChooser.getSelectedFile();
+		String fullPath = fc.getAbsolutePath();
+		return fullPath;
+		}
+	
+
 }
 
