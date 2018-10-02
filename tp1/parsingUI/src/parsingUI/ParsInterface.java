@@ -1,14 +1,21 @@
 package parsingUI;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-
-import testParsing.Launcher;
+import testParsing.Parser;
+import testParsing.PrinterHelper;
+import packageModels.Model;
 
 
 
@@ -28,7 +35,7 @@ public class ParsInterface extends JFrame implements ActionListener{
 	private PanelContainer sousClasses = new PanelContainer("sous_Classes");
 	private PanelContainer operations = new PanelContainer("Associations/Agrégation");
 	private JButton selectFile = new JButton("Charger fichier");
-	private JButton browse = new JButton("Parcourir");
+	//private JButton browse = new JButton("Parcourir");
 	private JPanel container4 = new JPanel();
 	private JTextArea details = new JTextArea();
 	private Border border;
@@ -48,14 +55,14 @@ public class ParsInterface extends JFrame implements ActionListener{
 		 
 		//set the 
 		selectFile.setPreferredSize(new Dimension(200, 50));
-		browse.setPreferredSize(new Dimension(100, 50));
+		//browse.setPreferredSize(new Dimension(100, 50));
 		
 		file.setBorder(BorderFactory.createLineBorder(Color.black));
 		containerNorth.setLayout(new BorderLayout(10,10));
 		containerNorth.setPreferredSize(new Dimension(900, 100));
 		containerNorth.add(selectFile, BorderLayout.WEST);
 		containerNorth.add(file, BorderLayout.CENTER);
-		containerNorth.add(browse, BorderLayout.EAST);
+		//containerNorth.add(browse, BorderLayout.EAST);
 		containerNorth.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.getContentPane().add(containerNorth, BorderLayout.NORTH);
 		
@@ -113,45 +120,58 @@ public class ParsInterface extends JFrame implements ActionListener{
 		this.setVisible(true);
 		
 		selectFile.addActionListener(this);
-		browse.addActionListener(this);
+		//browse.addActionListener(this);
 		
 	}
 
+	
+	public String scanFile(File f) throws IOException
+	{
+		  BufferedReader br = new BufferedReader(new FileReader(f)); 
+		  String inputFile = "";
+		  String st; 
+		  while ((st = br.readLine()) != null) 
+		  {
+			  inputFile += st+"\n"; 
+		  } 
+		  return inputFile;
+	}
+	
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent arg0) {
-		if(arg0.getSource() == this.browse) {
-			file.setText(chooseFile());
-		}
-		if(arg0.getSource() == this.selectFile) {
-			if(file.getText().trim().length()>0) {
-				System.out.println("maintenant faut le passer a launcher ");
-				}
-			else if(file.getText().trim().length()<=0) {
-				JOptionPane jop = new JOptionPane();
-				jop.showMessageDialog(null, "Veuillez choisir un fichier", "Erreur", JOptionPane.ERROR_MESSAGE);
+	public void actionPerformed(ActionEvent arg0) {
+		
+		if(arg0.getSource() == this.selectFile) 
+		{
+			File myFile = chooseFile();
+			String fullPath = myFile.getAbsolutePath();
+			file.setText(fullPath);	
+			String toPars = "";
+			try {
+				toPars = scanFile(myFile);
+				System.out.println(toPars);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-		}
-		else {
-			
-			
+			Model model  = Parser.getModel(toPars);
+				
+			PrinterHelper.printModel(model);
 		}
 	}
 	
 	//open a window dialog
-	public String chooseFile() {
+	public File chooseFile() 
+	{
 		FileSystemView openSystem = FileSystemView.getFileSystemView(); 
-		java.io.File defaut = openSystem.getDefaultDirectory();  
+		File defaut = openSystem.getDefaultDirectory();  
 		JFileChooser defautChooser = new JFileChooser(defaut); 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 			    "allowedFiles", "txt", "ucd");
 		defautChooser.addChoosableFileFilter(filter);
 		defautChooser.showOpenDialog(getParent());
-		java.io.File fc = defautChooser.getSelectedFile();
-		String fullPath = fc.getAbsolutePath();
-		return fullPath;
-		}
-	
-
+		File fc = defautChooser.getSelectedFile();
+		
+		return fc;
+	}
 }
 

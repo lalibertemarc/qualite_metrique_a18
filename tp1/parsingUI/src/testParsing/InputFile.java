@@ -10,7 +10,7 @@ public class InputFile {
 
 	public String scanFile() throws IOException
 	{
-		File file = new File("inputFile.txt"); 
+		File file = new File("inputFile.txt");
 		  
 		  BufferedReader br = new BufferedReader(new FileReader(file)); 
 		  String inputFile = "";
