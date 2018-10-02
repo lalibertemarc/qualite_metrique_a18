@@ -34,7 +34,7 @@ ATTRIBUTES
       nom : String,
       adresse : String
 OPERATIONS
-      Utilise_par(eq : Equipe, annee : Integer) :
+      Utilise_par(eq : Equipe, annee : Integer) : Boolean
 ;
 
 GENERALIZATION Participant
