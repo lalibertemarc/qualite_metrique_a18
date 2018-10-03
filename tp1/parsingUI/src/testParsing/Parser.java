@@ -29,6 +29,7 @@ public class Parser {
 		
 	
 		outputModel.setIdentifier(getModelId());
+	
 		if(!isFileCorrupt)
 			outputModel.setDetails(_mainFile);
 		else
@@ -56,15 +57,11 @@ public class Parser {
 		String id = "";
 		while(matcher.find())
         {
-			/*Couvre les cas suivants:
-			 * si on a plus que 2 noms
-			 * si le nom est vide
-			 * 
-			 * */
 			if(matcher.group().length()<1 || !id.equals("") || matcher.group(1).equals(""))
 			{
 				isFileCorrupt = true;
 				return null;
+				//message=malformed model name
 			}
 			
             id=matcher.group(1);
@@ -73,6 +70,7 @@ public class Parser {
 		{
 			isFileCorrupt = true;
 			return null;
+			//message=empty model name
 		}
 		return id;
 	}
@@ -88,6 +86,7 @@ public class Parser {
 			{
 				isFileCorrupt = true;
 				return null;
+				//message=empty class name
 			}
 			
 			String match = matcher.group(1);
@@ -97,12 +96,19 @@ public class Parser {
 			Class_dec newClass = new Class_dec();
 			String id= idAr[0];
 			
+			boolean check = checkForClassDuplicates(output, id);
+			if(!check)
+			{
+				isFileCorrupt = true;
+				//message=class already declared
+				return null;
+			}
+			
 			newClass.setIdentifier(id);
 			newClass.setDetails(getClassDetail(id));
 			newClass.setAttributes(getClassAttributes(id));
 			newClass.setOperations(getClassOperations(id));
 			newClass.setSubclasses(getSubclasses(id));
-			
 			
 			output.add(newClass);
           
@@ -113,10 +119,22 @@ public class Parser {
 		{
 			isFileCorrupt = true;
 			return null;
+			//message=no classes declared
 		}
 		return output;
 	}
 	
+	private static boolean checkForClassDuplicates(List<Class_dec> output, String id) {
+		
+		for(int i=0;i<output.size();i++)
+		{
+			if(output.get(i).getIdentifier().equals(id))
+				return false;
+		}
+		return true;
+	}
+
+
 	private static List<String> getSubclasses(String id) {
 		List<String> output = new ArrayList<String>();
 		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES (.*)\\n;";
@@ -129,6 +147,7 @@ public class Parser {
 			{
 				isFileCorrupt = true;
 				return null;
+				//message=malformed subclasses name
 			}
 			String[] classes = matcher.group(2).split(", ");
 			for(int i = 0 ;i<classes.length;i++)
@@ -159,8 +178,7 @@ public class Parser {
 				String item = datAr[i].replaceAll("\\s+","");
 				Data_Item attribute = getDataItem(item);
 				output.add(attribute);
-			}
-			
+			}	
 		}
 		
 		return output;
@@ -197,6 +215,7 @@ public class Parser {
 				{
 					isFileCorrupt = true;
 					return null;
+					//message=malformed operation declaration
 				}
 				newOp.setArg_list(getOpArgs(name));
 				newOp.setIdentifier(name);
@@ -232,8 +251,6 @@ public class Parser {
 	}
 
 	
-
-	
 	private static Data_Item getDataItem(String input)
 	{
 		Data_Item attribute = new Data_Item();
@@ -242,6 +259,7 @@ public class Parser {
 		if(itemAr.length<2 || itemAr[0].equals("") || itemAr[1].equals(""))
 		{
 			isFileCorrupt = true;
+			//message=malformed data item
 			return null;
 		}
 		attribute.setIdentifier(itemAr[0]);
@@ -297,6 +315,7 @@ public class Parser {
 			if(classdec.equals("") || classdec==null)
 			{
 				isFileCorrupt = true;
+				//message=malformed role declaration
 				return null;
 			}
 			role.setClass_dec(classdec);
@@ -306,6 +325,7 @@ public class Parser {
 			{
 				isFileCorrupt = true;
 				return null;
+				//message=mutliplicity does not exists
 			}
 			role.setMultiplicity(mul);
 		}
