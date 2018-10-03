@@ -23,41 +23,38 @@ import packageModels.Association;
 import packageModels.Class_dec;
 import packageModels.Data_Item;
 import packageModels.Model;
+import packageModels.Modelable;
 import packageModels.Operation;
+import packageModels.ParsingError;
 
 
 
 
 public class ParsInterface extends JFrame implements ActionListener{
 	
-	private JPanel container = new JPanel();
 	private JPanel containerNorth = new JPanel();
 	private JTextField file = new JTextField();
-	private JButton selectFile = new JButton("Charger fichier");
+	private JButton selectFile = new JButton("Load File");
 	
-	private PanelContainer classes = new PanelContainer("classes");
-	private PanelContainer attributes = new PanelContainer("attributs");
-	private PanelContainer methods = new PanelContainer("méthodes");
-	private PanelContainer sousClasses = new PanelContainer("sous_Classes");
-	private PanelContainer associations = new PanelContainer("Associations/Agrégation");
-	private PanelContainer details = new PanelContainer("details");
+	private PanelContainer classes = new PanelContainer("Classes");
+	private PanelContainer attributes = new PanelContainer("Attributs");
+	private PanelContainer methods = new PanelContainer("Methodes");
+	private PanelContainer sousClasses = new PanelContainer("Sous Classes");
+	private PanelContainer associations = new PanelContainer("Associations/Agregation");
+	private PanelContainer details = new PanelContainer("Details");
 
 	
-	private DefaultListModel modelClass = new DefaultListModel();
-	private DefaultListModel<String> modelAttr = new DefaultListModel();
-	private DefaultListModel<String> modelMeth = new DefaultListModel();
-	private DefaultListModel modelSub = new DefaultListModel();
-	private DefaultListModel modelAgr = new DefaultListModel();
-	private DefaultListModel modelDet = new DefaultListModel();
+	private DefaultListModel<String> modelClass = new DefaultListModel<String>();
+	private DefaultListModel<String> modelAttr = new DefaultListModel<String>();
+	private DefaultListModel<String> modelMeth = new DefaultListModel<String>();
+	private DefaultListModel<String> modelSub = new DefaultListModel<String>();
+	private DefaultListModel<String> modelAgr = new DefaultListModel<String>();
+	private DefaultListModel<String> modelDet = new DefaultListModel<String>();
 
 	private ArrayList<Class_dec> myClasses;
 	private ArrayList<Data_Item> myAttributes;
 	private ArrayList<Operation> myMethods;
 	private ArrayList<String> mySubClass;
-	private ArrayList<Aggregation> myAggregations;
-	private ArrayList<Association> myAssociations;
-	
-	
 	
 	JList<String> jClass = new JList<>(modelClass);
 	JList<String> jAttributes= new JList<>(modelAttr);
@@ -65,11 +62,11 @@ public class ParsInterface extends JFrame implements ActionListener{
 	JList<String> jSubClass= new JList<>(modelSub);
 	JList<String> jAggregations= new JList<>(modelAgr);
 	JList<String> jDetails= new JList<>(modelDet);
-	//private Object ListselectionModel;
-
+	ArrayList<JList<String>> allList = new ArrayList<JList<String>>();
+	ArrayList<DefaultListModel<String>> allModelList = new ArrayList<DefaultListModel<String>>();
 
 	public ParsInterface(){	
-		//modelClass.addElement(null);
+
 		//basic appearance 
 		this.setTitle("Parseur");
 		this.setPreferredSize(new Dimension(1000, 1000));
@@ -79,53 +76,50 @@ public class ParsInterface extends JFrame implements ActionListener{
 		this.setLayout(null); 
 		this.getContentPane().setBackground(new Color(240,248,255));
 		
-		 
-		//select zone
-		selectFile.setPreferredSize(new Dimension(200, 50));
-		selectFile.addActionListener(this);
-		
-		file.setBorder(BorderFactory.createLineBorder(Color.black));
-		containerNorth.setLayout(new BorderLayout(10,10));
-		containerNorth.setPreferredSize(new Dimension(900, 100));
-		containerNorth.add(selectFile, BorderLayout.WEST);
-		containerNorth.add(file, BorderLayout.CENTER);
-		containerNorth.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		containerNorth.setBounds(0, 0, 1000, 100);
 		this.getContentPane().add(containerNorth);
 		
-		
+
 		//event listener for the list of Classes
 		jClass.addListSelectionListener(new ListSelectionListener(){
 		    public void valueChanged(ListSelectionEvent e) {
 		    	if(e.getValueIsAdjusting()) {
 		    		return;
 		    	} 
-		    	System.out.println(jClass.getSelectedIndex());
+		    	
 		    	int selectedIndex =jClass.getSelectedIndex();
-		    	//System.out.println(jClass.getSelectedValues());
-		    	//Model model = 
-		    	if(modelAttr.size()>0) {
-		    		modelAttr.removeAllElements();
-		    	}
+		    	
+
+		    	modelAttr.clear();
 		    	Class_dec selectedClass =  myClasses.get(selectedIndex);
 		    	myAttributes =(ArrayList<Data_Item>) selectedClass.getAttributes();
 		    	
-		    	for(int i=0; i< myAttributes.size(); i++) {
-		    		modelAttr.addElement(myAttributes.get(i).getIdentifier());
-		    		//modelAttr.notify();
-		    	}
+		    	
+		    	for(int i=0; i< myAttributes.size(); i++)
+		    		modelAttr.addElement(myAttributes.get(i).getType() + " : " + myAttributes.get(i).getIdentifier());
+		    		
+		    	
+		    	modelMeth.clear();
 		    	myMethods =(ArrayList<Operation>) selectedClass.getOperations();
-		    	for(int i=0; i< myMethods.size(); i++) {
-		    		modelMeth.addElement(myMethods.get(i).getIdentifier());
-		    	}
+		    	for(int i=0; i< myMethods.size(); i++)
+		    		modelMeth.addElement(myMethods.get(i).getType() + ": " + myMethods.get(i).getIdentifier());
+		    
 		    	
 		    	mySubClass =(ArrayList<String>) selectedClass.getSubclasses();
+		    	modelSub.clear();
 		    	if(mySubClass!=null) {
-		    		//mySubClass.clear();
+	    		
 		    		for(int i=0; i< mySubClass.size(); i++) {
 			    		modelSub.addElement(mySubClass.get(i));
 			    	}
 		    	}
+		    	modelDet.clear();
+		    	modelDet.addElement(selectedClass.getDetails());
+		    	//System.out.println(selectedClass.getDetails().split("\n"));
+//		    	JLabel detailsLabel = new JLabel();
+//		    	detailsLabel.setText(selectedClass.getDetails());
+//		    	details.add(detailsLabel);
+		    	
+		    	
 //		    	my =(ArrayList<String>) selectedClass.getSubclasses();
 //		    	for(int i=0; i< myAggregations.size(); i++) {
 //		    		modelAgr.addElement(myAggregations.get(i));
@@ -136,8 +130,44 @@ public class ParsInterface extends JFrame implements ActionListener{
 		    }
 		});
 		
-		jClass.setBounds(10, 100, 300, 850);
+		initAllLists();
+		initStyling();
+		initFormating();
+		
+		this.getContentPane().add(classes);
+		this.getContentPane().add(attributes);
+		this.getContentPane().add(methods);
+		this.getContentPane().add(sousClasses);
+		this.getContentPane().add(associations);
+		this.getContentPane().add(details);
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
+		this.setVisible(true);		
+	}
 
+	private void initAllLists() {
+		allList.add(jClass);
+		allList.add(jAttributes);
+		allList.add(jAggregations);
+		allList.add(jDetails);
+		allList.add(jMethods);
+		allList.add(jSubClass);
+		
+		allModelList.add(modelAgr);
+		allModelList.add(modelAttr);
+		allModelList.add(modelClass);
+		allModelList.add(modelDet);
+		allModelList.add(modelMeth);
+		allModelList.add(modelSub);
+	}
+	
+	private void clearAllList()
+	{
+		for(int i=0 ;i<allModelList.size();i++)
+			allModelList.get(i).clear();
+	}
+
+	private void initFormating() {
 		classes.add(jClass);
 		attributes.add(jAttributes);
 		methods.add(jMethods);
@@ -152,21 +182,42 @@ public class ParsInterface extends JFrame implements ActionListener{
 		associations.setBounds(630, 370, 360, 240);
 		details.setBounds(320, 630, 660, 300);
 		
-		this.getContentPane().add(classes);
-		this.getContentPane().add(attributes);
-		this.getContentPane().add(methods);
-		this.getContentPane().add(sousClasses);
-		this.getContentPane().add(associations);
-		this.getContentPane().add(details);
+	}
+
+	private void initStyling() {
 		
+		// Set list styling
+		jClass.setFont(new Font("Areal", Font.BOLD, 20));
+		jAttributes.setFont(new Font("Areal", Font.PLAIN, 14));
+		jMethods.setFont(new Font("Areal", Font.PLAIN, 14));
+		jSubClass.setFont(new Font("Areal", Font.PLAIN, 14));
+		jAggregations.setFont(new Font("Areal", Font.PLAIN, 14));
+		jDetails.setFont(new Font("Areal", Font.PLAIN, 14));
+
+		//set list container styling
+		classes.setLayout(new BorderLayout());
+		attributes.setLayout(new BorderLayout());
+		methods.setLayout(new BorderLayout());
+		sousClasses.setLayout(new BorderLayout());
+		associations.setLayout(new BorderLayout());
+		details.setLayout(new BorderLayout());
 		
 		//set a background color
 		containerNorth.setBackground(new Color(240,248,255));
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
-		this.setVisible(true);		
+		
+		// select zone
+		selectFile.setPreferredSize(new Dimension(200, 50));
+		selectFile.addActionListener(this);
+
+		file.setBorder(BorderFactory.createLineBorder(Color.black));
+		containerNorth.setLayout(new BorderLayout(10, 10));
+		containerNorth.setPreferredSize(new Dimension(900, 100));
+		containerNorth.add(selectFile, BorderLayout.WEST);
+		containerNorth.add(file, BorderLayout.CENTER);
+		containerNorth.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		containerNorth.setBounds(0, 0, 1000, 100);
 	}
 
-	
 	public String scanFile(File f) throws IOException
 	{
 		  BufferedReader br = new BufferedReader(new FileReader(f)); 
@@ -184,37 +235,50 @@ public class ParsInterface extends JFrame implements ActionListener{
 		
 		if(arg0.getSource() == this.selectFile) 
 		{
-			File myFile = chooseFile();
-			String fullPath = myFile.getAbsolutePath();
+			File inputFile = chooseFile();
+			
+			if(inputFile==null)
+				return;
+			
+			String fullPath = inputFile.getAbsolutePath();
 			file.setText(fullPath);	
-			String toPars = "";
+			String toParse = "";
+			
 			try {
-				toPars = scanFile(myFile);
-				//System.out.println(toPars);
+				toParse = scanFile(inputFile);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				clearAllList();
 				e.printStackTrace();
 			}
 			
-			Model model = Parser.getModel(toPars);
+			System.out.println("une fois icitte");
+			Modelable model = Parser.getModel(toParse);
 			
-			if(model==null) {
+			if(model instanceof ParsingError) 
+			{
 				
-				JOptionPane panelErreur = new JOptionPane();
-				panelErreur.showMessageDialog(null, "le fichier est corrompu", 
+				new JOptionPane();
+				JOptionPane.showMessageDialog(null, ((ParsingError)model).getMessage(), 
 						"Erreur", JOptionPane.ERROR_MESSAGE);
+				toParse="";
+				model=null;
+				inputFile=null;
+				return;
 			}
-			else {
-				myClasses = (ArrayList<Class_dec>) model.getList_dec();
-				for(Class_dec c : myClasses) {
+			else 
+			{
+				//load all classes by default
+				myClasses = (ArrayList<Class_dec>) ((Model)model).getList_dec();
+				modelClass.clear();
+				for(Class_dec c : myClasses) 
+				{
 					modelClass.addElement(c.getIdentifier());
 				}
-				System.out.println(modelClass);
-				//this.jClass = new JList(modelClass);
+
 				classes.add(jClass);	
 			}	
 		}
-		//if(arg0.getSource()==this.)
+		
 	}
 	
 	//open a window dialog
@@ -222,14 +286,22 @@ public class ParsInterface extends JFrame implements ActionListener{
 	{
 		FileSystemView openSystem = FileSystemView.getFileSystemView(); 
 		File defaut = openSystem.getDefaultDirectory();  
-		JFileChooser defautChooser = new JFileChooser(defaut); 
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			    "allowedFiles", "txt", "ucd");
-		defautChooser.addChoosableFileFilter(filter);
-		defautChooser.showOpenDialog(getParent());
-		File fc = defautChooser.getSelectedFile();
+		JFileChooser defaultChooser = new JFileChooser(); 
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Ucd Files", "txt", "text", "ucd",".ucd");
+		defaultChooser.setAcceptAllFileFilterUsed(false);
+		defaultChooser.setFileFilter(filter);
+		defaultChooser.showOpenDialog(getParent());
 		
-		return fc;
+		try {
+			File fc = defaultChooser.getSelectedFile();
+			return fc;
+		}catch(Exception er)
+		{
+			
+			er.printStackTrace();
+		}
+		clearAllList();
+		return null;
 	}
 
 }

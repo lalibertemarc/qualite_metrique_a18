@@ -279,13 +279,14 @@ public class Parser {
 	
 	private static String getClassDetail(String id)
 	{
-		String regex = "CLASS "+ id+"\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS\\n((.+\\n)+);";
+		String regex = "CLASS "+ id+"\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS\\n((.+\\n)+)";
 		Pattern classDetails = Pattern.compile(regex);
 		Matcher matcher = classDetails.matcher(_mainFile);
 		String details = "";
 		
+		//need to format in html for jlist UI
 		if(matcher.find())
-			details = matcher.group();
+			details = "<html>"+ matcher.group().replace("\n", "<br>")+"<html>";
 
 		return details;	
 	}
