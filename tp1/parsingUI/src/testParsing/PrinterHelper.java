@@ -34,6 +34,7 @@ public class PrinterHelper {
 
 	private static void printClasses(List<Class_dec> l)
 	{
+		System.out.println("class_dec == "+l);
 		for(int i=0;i<l.size();i++)
 		{
 			System.out.println("Class Name: "+l.get(i).getIdentifier());
