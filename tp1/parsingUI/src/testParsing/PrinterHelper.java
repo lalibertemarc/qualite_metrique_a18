@@ -7,17 +7,19 @@ import packageModels.Association;
 import packageModels.Class_dec;
 import packageModels.Data_Item;
 import packageModels.Model;
+import packageModels.Modelable;
 import packageModels.Operation;
+import packageModels.ParsingError;
 import packageModels.Role;
 
 
 
 public class PrinterHelper {
 	
-	public static void printModel(Model m)
+	public static void printModel(Modelable m)
 	{
-		if(m== null) {
-			System.out.println("FILE is corrupted");
+		if(m instanceof ParsingError) {
+			System.out.println(((ParsingError)m).getMessage());
 			return;
 		}
 			
@@ -25,9 +27,9 @@ public class PrinterHelper {
 		System.out.println("");
 		//System.out.println("MODEL Details: "+m.getDetails());
 		
-		printClasses(m.getList_dec());
-		printAssociation(m.getAssociations());
-		printAggregation(m.getAggregations());
+		printClasses(((Model)m).getList_dec());
+		printAssociation(((Model)m).getAssociations());
+		printAggregation(((Model)m).getAggregations());
 		//System.out.println(m.getDetails());
 	}
 	

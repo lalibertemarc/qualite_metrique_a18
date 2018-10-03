@@ -4,6 +4,7 @@ package testParsing;
 import java.io.IOException;
 
 import packageModels.Model;
+import packageModels.Modelable;
 
 public class Launcher {
 
@@ -18,7 +19,7 @@ public class Launcher {
 			e.printStackTrace();
 		}
 		//System.out.println(file);
-		Model model  = Parser.getModel(file);
+		Modelable model  = Parser.getModel(file);
 		
 		PrinterHelper.printModel(model);
 	}
