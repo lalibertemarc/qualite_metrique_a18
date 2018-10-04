@@ -321,7 +321,7 @@ public class Parser {
 		while(matcher.find())
 		{
 			Association newAsso = new Association();
-			String assoId = matcher.group(1);
+			String assoId = matcher.group(1).replaceAll(" ", "");
 			newAsso.setIdentifier(assoId);
 			Role role1 = getRole(matcher.group(3));
 			newAsso.setRole1(role1);

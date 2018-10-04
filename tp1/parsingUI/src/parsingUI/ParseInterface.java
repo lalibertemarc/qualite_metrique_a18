@@ -149,6 +149,8 @@ public class ParseInterface extends JFrame{
 		    	selectedClass =  ((Model)mainModel).getList_dec().get(selectedIndex);
 		    	jListAttributes.clearSelection();
 		    	jListMethods.clearSelection();
+		    	jListSubClass.clearSelection();
+		    	jListDetails.clearSelection();
 		    	myAttributes =(ArrayList<Data_Item>) selectedClass.getAttributes();
 		    	
 		    	
@@ -190,6 +192,7 @@ public class ParseInterface extends JFrame{
 				
 				jListAttributes.clearSelection();
 				jListAggregations.clearSelection();
+				jListSubClass.clearSelection();
 				fillDetails(selectedClass.getDetails());
 				
 				String element = adapterOperations.getElementAt(i);
@@ -212,6 +215,7 @@ public class ParseInterface extends JFrame{
 					return;
 				jListMethods.clearSelection();
 				jListAggregations.clearSelection();
+				jListSubClass.clearSelection();
 				fillDetails(selectedClass.getDetails());
 				
 				String element = adapterAttributes.getElementAt(i);
@@ -239,14 +243,31 @@ public class ParseInterface extends JFrame{
 					return;
 				jListMethods.clearSelection();
 				jListAttributes.clearSelection();
+				jListDetails.clearSelection();
+				jListSubClass.clearSelection();
 				String element = adapterAggregetionsAssociations.getElementAt(i);
 				if(element.contains("(A)"))
 				{
 					adapterDetails.clear();
 					//TODO find corresponding aggregation, not hardcoded first one
 					String[] elementToScan = element.split(" _ ");
+					
 					fillDetails(((Model)mainModel).getAggregations().get(0).getDetails());
 					scanDetails(elementToScan[1]);
+				}
+				
+				else if(element.contains("(R)"))
+				{
+					adapterDetails.clear();
+					String[] elementToScan = element.split(" ");
+					String assoId = elementToScan[1];
+					for(int j = 0;j<((Model)mainModel).getAssociations().size();j++)
+					{
+						if(((Model)mainModel).getAssociations().get(j).getIdentifier().equals(assoId)){
+							fillDetails(((Model)mainModel).getAssociations().get(j).getDetails());
+							scanDetails(selectedClass.getIdentifier());
+						}
+					}
 				}
 				
 			}
@@ -409,53 +430,9 @@ public class ParseInterface extends JFrame{
 		{
 			for(int i=0;i<selectedClass.getAssoList().size();i++)
 			{
-				adapterAggregetionsAssociations.addElement(selectedClass.getAssoList().get(i));
+				adapterAggregetionsAssociations.addElement(c.getAssoList().get(i));
 			}
 		}
-//		for(int i=0;i<ass.size();i++)
-//		{
-//			//adapterAggregetionsAssociations.addElement(i+"");
-//			Association assNow = ass.get(i);
-//			if(classId.equals(assNow.getRole1().getClass_dec())); 
-//			{
-//				adapterAggregetionsAssociations.addElement(classId);
-//				adapterAggregetionsAssociations.addElement(assNow.getRole1().getClass_dec());
-//				String roleToAdd;
-//				if(classId.equals(assNow.getRole2().getClass_dec()))
-//				{
-//					roleToAdd = assNow.getRole1().getClass_dec();
-//				}
-//				else
-//				{
-//					roleToAdd = assNow.getRole2().getClass_dec();
-//				}
-//				
-//				String elementToAdd = "(R) " + 
-//						classId 
-//						+" "+ assNow.getIdentifier() 
-//						+" "+  assNow.getRole2().getMultiplicity() 
-//						+" "+ roleToAdd;
-//				
-//				if(!adapterAggregetionsAssociations.contains(elementToAdd))
-//				{
-//					adapterAggregetionsAssociations.addElement(elementToAdd);
-//				
-//				}
-//			}
-//		}
-//						 
-			//}
-//			if(assNow.getRole2().getClass_dec().equals(classId)); 
-//			{
-//				adapterAggregetionsAssociations.addElement(
-//						"(R) " + 
-//						classId 
-//						+" "+ assNow.getIdentifier() 
-//						+" "+  assNow.getRole1().getMultiplicity() 
-//						+" " + assNow.getRole1().getClass_dec() );
-//			}
-		//}
-		
 		
 	}
 	
