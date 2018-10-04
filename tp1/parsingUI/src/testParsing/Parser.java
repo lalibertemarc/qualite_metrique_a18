@@ -342,15 +342,18 @@ public class Parser {
 		
 		for(int i=0;i<outputModel.getList_dec().size();i++)
 		{
+			String classId = outputModel.getList_dec().get(i).getIdentifier();
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name1))
 			{
 				outputModel.getList_dec().get(i).setAssoFlag(true);
-				outputModel.getList_dec().get(i).addAssoToList("(R) "+assoId);
+				outputModel.getList_dec().get(i).addAssoToList("(R) "+ assoId);
+				//outputModel.getList_dec().get(i).addAssoToList("(R) "+classId+ " "+assoId + role2.getMultiplicity() + " " + name2);
 			}
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
 			{
 				outputModel.getList_dec().get(i).setAssoFlag(true);
-				outputModel.getList_dec().get(i).addAssoToList("(R) "+assoId);
+				outputModel.getList_dec().get(i).addAssoToList("(R) "+ assoId);
+				//outputModel.getList_dec().get(i).addAssoToList("(R) "+name1+ " "+assoId + role1.getMultiplicity() + " " + classId);
 			}
 		}
 		

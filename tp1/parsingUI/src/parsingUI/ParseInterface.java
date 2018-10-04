@@ -41,7 +41,7 @@ public class ParseInterface extends JFrame{
 	private PanelContainer attributesPanelContainer = new PanelContainer("Attributs");
 	private PanelContainer methodsPanelContainer = new PanelContainer("Methodes");
 	private PanelContainer sousClassesPanelContainer = new PanelContainer("Sub Classes");
-	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Aggregation");
+	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Relations");
 	private PanelContainer detailsPanelContainer = new PanelContainer("Details");
 	
 	private DefaultListModel<String> adatperClassDec;
