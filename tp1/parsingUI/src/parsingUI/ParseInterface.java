@@ -45,7 +45,7 @@ public class ParseInterface extends JFrame{
 	private PanelContainer detailsPanelContainer = new PanelContainer("Details");
 	
 	private DefaultListModel<String> adatperClassDec;
-	private DefaultListModel<String> adapterlAttributes ;
+	private DefaultListModel<String> adapterAttributes ;
 	private DefaultListModel<String> adapterOperations ;
 	private DefaultListModel<String> adapterSubClasses;
 	private DefaultListModel<String> adapterAggregetionsAssociations ;
@@ -128,7 +128,8 @@ public class ParseInterface extends JFrame{
 					
 					classesPanelContainer.add(jListClass);
 					adapterDetails.clear();
-					adapterDetails.addElement(model.getDetails());
+					//adapterDetails.addElement(model.getDetails());
+					fillDetails(model.getDetails());
 				}	
 			}
 		});
@@ -144,7 +145,7 @@ public class ParseInterface extends JFrame{
 		    	if(selectedIndex==-1)
 		    		return;
 		    	
-		    	adapterlAttributes.clear();
+		    	adapterAttributes.clear();
 		    	selectedClass =  ((Model)mainModel).getList_dec().get(selectedIndex);
 		    	jListAttributes.clearSelection();
 		    	jListMethods.clearSelection();
@@ -152,13 +153,13 @@ public class ParseInterface extends JFrame{
 		    	
 		    	
 		    	for(int i=0; i< myAttributes.size(); i++)
-		    		adapterlAttributes.addElement(myAttributes.get(i).getType() + " : " + myAttributes.get(i).getIdentifier());
+		    		adapterAttributes.addElement(myAttributes.get(i).getIdentifier() + " : " + myAttributes.get(i).getType());
 		    		
 		    	
 		    	adapterOperations.clear();
 		    	myMethods =(ArrayList<Operation>) selectedClass.getOperations();
 		    	for(int i=0; i< myMethods.size(); i++)
-		    		adapterOperations.addElement(myMethods.get(i).getType() + ": " + myMethods.get(i).getIdentifier());
+		    		adapterOperations.addElement(myMethods.get(i).getIdentifier() + ":" + myMethods.get(i).getType());
 		    
 		    	
 		    	mySubClass =(ArrayList<String>) selectedClass.getSubclasses();
@@ -170,8 +171,8 @@ public class ParseInterface extends JFrame{
 			    	}
 		    	}
 		    	adapterDetails.clear();
-		    	adapterDetails.addElement(selectedClass.getDetails());
-		    	
+		    	//adapterDetails.addElement(selectedClass.getDetails());
+		    	fillDetails(selectedClass.getDetails());
 		    	initAggAssAdapter(selectedClass);
 		    	
 		    }	
@@ -181,14 +182,18 @@ public class ParseInterface extends JFrame{
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				
 				int i = jListMethods.getSelectedIndex();
-			
-				if(i < selectedClass.getOperations().size() && i!= -1) {
-					Operation selectedMethod = selectedClass.getOperations().get(i);
-					
-					adapterDetails.clear();
-					adapterDetails.addElement(selectedMethod.getDetails());
-				}
+				
+				if(i==-1)
+					return;
+				
+				jListAttributes.clearSelection();
+				jListAggregations.clearSelection();
+				fillDetails(selectedClass.getDetails());
+				
+				String element = adapterOperations.getElementAt(i);
+				scanDetails(element);
 				
 				
 			}
@@ -199,14 +204,18 @@ public class ParseInterface extends JFrame{
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				
 				int i = jListAttributes.getSelectedIndex();
-				if(i!=-1)
-				{
-					Data_Item selectedItem = selectedClass.getAttributes().get(i);
-
-					adapterDetails.clear();
-					adapterDetails.addElement(selectedItem.getDetails());
-				}
+				
+				
+				if(i==-1)
+					return;
+				jListMethods.clearSelection();
+				jListAggregations.clearSelection();
+				fillDetails(selectedClass.getDetails());
+				
+				String element = adapterAttributes.getElementAt(i);
+				scanDetails(element);
 			}
 		});
 		
@@ -228,12 +237,16 @@ public class ParseInterface extends JFrame{
 				
 				if(i==-1)
 					return;
+				jListMethods.clearSelection();
+				jListAttributes.clearSelection();
 				String element = adapterAggregetionsAssociations.getElementAt(i);
 				if(element.contains("(A)"))
 				{
 					adapterDetails.clear();
 					//TODO find corresponding aggregation, not hardcoded first one
-					adapterDetails.addElement(((Model)mainModel).getAggregations().get(0).getDetails());
+					String[] elementToScan = element.split(" _ ");
+					fillDetails(((Model)mainModel).getAggregations().get(0).getDetails());
+					scanDetails(elementToScan[1]);
 				}
 				
 			}
@@ -257,14 +270,14 @@ public class ParseInterface extends JFrame{
 
 	private void initJList() {
 		adatperClassDec = new DefaultListModel<String>();
-		adapterlAttributes = new DefaultListModel<String>();
+		adapterAttributes = new DefaultListModel<String>();
 		adapterOperations = new DefaultListModel<String>();
 		adapterSubClasses = new DefaultListModel<String>();
 		adapterAggregetionsAssociations = new DefaultListModel<String>();
 		adapterDetails = new DefaultListModel<String>();
 
 		jListClass = new JList<>(adatperClassDec);
-		jListAttributes= new JList<>(adapterlAttributes);
+		jListAttributes= new JList<>(adapterAttributes);
 		jListMethods= new JList<>(adapterOperations);
 		jListSubClass= new JList<>(adapterSubClasses);
 		jListAggregations= new JList<>(adapterAggregetionsAssociations);
@@ -281,7 +294,7 @@ public class ParseInterface extends JFrame{
 		
 		allModelList.add(adatperClassDec);
 		allModelList.add(adapterAggregetionsAssociations);
-		allModelList.add(adapterlAttributes);	
+		allModelList.add(adapterAttributes);	
 		allModelList.add(adapterDetails);
 		allModelList.add(adapterOperations);
 		allModelList.add(adapterSubClasses);
@@ -298,6 +311,27 @@ public class ParseInterface extends JFrame{
 			allModelList.get(i).clear();
 		}
 			
+	}
+	
+	private void fillDetails(String d)
+	{
+		String[] details = d.split("\n");
+		adapterDetails.clear();
+		for(int i = 0;i<details.length;i++)
+		{
+			adapterDetails.addElement(details[i]);
+		}
+	}
+	private void scanDetails(String el)
+	{
+		for(int i= 0;i<adapterDetails.size();i++)
+		{
+			if(adapterDetails.getElementAt(i).contains(el))
+			{
+				jListDetails.setSelectedIndex(i);
+				return;
+			}
+		}
 	}
 	
 	private void initFormating() {

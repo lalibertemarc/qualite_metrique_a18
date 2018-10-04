@@ -35,7 +35,7 @@ public class Parser {
 		outputModel.setIdentifier(getModelId());
 	
 		if(!isFileCorrupt)
-			outputModel.setDetails("<html>"+_mainFile.replace("\n", "<br>")+"<html>");
+			outputModel.setDetails(_mainFile);
 		else
 		{
 			isFileCorrupt=false;
@@ -218,7 +218,8 @@ public class Parser {
 			for(int i=0;i<opAr.length;i++)
 			{
 				Operation newOp = new Operation();
-				String item = opAr[i].replaceAll("\\s+","");
+				//String item = opAr[i].replaceAll("\\s+","");
+				String item = opAr[i];
 				
 				if(item.equals(";"))
 					continue;
@@ -230,7 +231,7 @@ public class Parser {
 				String type = "";
 				if(opMatcher.find())
 				{
-					name = opMatcher.group(1);
+					name = opMatcher.group(1).replace("     ", "");
 					type = opMatcher.group(2).replace(",", "");
 				}
 				
@@ -301,7 +302,11 @@ public class Parser {
 		
 		//need to format in html for jlist UI
 		if(matcher.find())
-			details = "<html>"+ matcher.group().replace("\n", "<br>")+"<html>";
+		{
+			//details = "<html>"+ matcher.group().replace("\n", "<br>")+"<html>";
+			details = matcher.group();
+		}
+			
 
 		return details;	
 	}
@@ -392,7 +397,7 @@ public class Parser {
 			
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
-			aggregation.setDetails("<html>"+matcher.group().replaceAll("\n", "<br>")+"</html>");
+			aggregation.setDetails(matcher.group());
 			output.add(aggregation);
 		}
 		
