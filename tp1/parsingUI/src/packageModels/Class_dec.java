@@ -1,5 +1,6 @@
 package packageModels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Class_dec implements Modelable {
@@ -9,6 +10,8 @@ public class Class_dec implements Modelable {
 	private List<Data_Item> attributes;
 	private List<Operation> operations;
 	private List<String> subclasses;
+	private boolean hasAssociations = false;
+	private List<String> assoList = new ArrayList<String>();
 
 	public List<Data_Item> getAttributes() {
 		return this.attributes;
@@ -35,10 +38,22 @@ public class Class_dec implements Modelable {
 	}
 
 	public boolean hasAssociation() {
-		// TODO - implement Class_dec.hasAssociation
-		throw new UnsupportedOperationException();
+		return hasAssociations;
+	}
+	public void setAssoFlag(boolean b)
+	{
+		hasAssociations=b;
 	}
 
+	public void addAssoToList(String s)
+	{
+		assoList.add(s);
+	}
+	
+	public List<String> getAssoList()
+	{
+		return assoList;
+	}
 	public boolean hasAggregation() {
 		// TODO - implement Class_dec.hasAggregation
 		throw new UnsupportedOperationException();

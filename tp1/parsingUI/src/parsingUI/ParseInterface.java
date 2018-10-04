@@ -342,12 +342,12 @@ public class ParseInterface extends JFrame{
 		associationsPanelContainer.add(jListAggregations);
 		detailsPanelContainer.add(new JScrollPane(jListDetails));
 		
-		classesPanelContainer.setBounds(10, 100, 300, 850);
+		classesPanelContainer.setBounds(10, 100, 300, 830);
 		attributesPanelContainer.setBounds(320, 100, 300, 260);
 		methodsPanelContainer.setBounds(630, 100, 360, 260);
 		sousClassesPanelContainer.setBounds(320, 370, 300, 240);
 		associationsPanelContainer.setBounds(630, 370, 360, 240);
-		detailsPanelContainer.setBounds(320, 630, 660, 300);
+		detailsPanelContainer.setBounds(320, 630, 670, 300);
 		
 	}
 
@@ -405,14 +405,21 @@ public class ParseInterface extends JFrame{
 			}
 		}
 		
+		if(selectedClass.hasAssociation())
+		{
+			for(int i=0;i<selectedClass.getAssoList().size();i++)
+			{
+				adapterAggregetionsAssociations.addElement(selectedClass.getAssoList().get(i));
+			}
+		}
 //		for(int i=0;i<ass.size();i++)
 //		{
 //			//adapterAggregetionsAssociations.addElement(i+"");
 //			Association assNow = ass.get(i);
 //			if(classId.equals(assNow.getRole1().getClass_dec())); 
 //			{
-////				adapterAggregetionsAssociations.addElement(classId);
-////				adapterAggregetionsAssociations.addElement(assNow.getRole1().getClass_dec());
+//				adapterAggregetionsAssociations.addElement(classId);
+//				adapterAggregetionsAssociations.addElement(assNow.getRole1().getClass_dec());
 //				String roleToAdd;
 //				if(classId.equals(assNow.getRole2().getClass_dec()))
 //				{
@@ -429,11 +436,13 @@ public class ParseInterface extends JFrame{
 //						+" "+  assNow.getRole2().getMultiplicity() 
 //						+" "+ roleToAdd;
 //				
-////				if(!adapterAggregetionsAssociations.contains(elementToAdd))
-////				{
+//				if(!adapterAggregetionsAssociations.contains(elementToAdd))
+//				{
 //					adapterAggregetionsAssociations.addElement(elementToAdd);
-//				//}
-				
+//				
+//				}
+//			}
+//		}
 //						 
 			//}
 //			if(assNow.getRole2().getClass_dec().equals(classId)); 

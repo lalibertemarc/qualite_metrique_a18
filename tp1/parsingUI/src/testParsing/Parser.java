@@ -321,9 +321,13 @@ public class Parser {
 		while(matcher.find())
 		{
 			Association newAsso = new Association();
-			newAsso.setIdentifier(matcher.group(1));
-			newAsso.setRole1(getRole(matcher.group(3)));
-			newAsso.setRole2(getRole(matcher.group(4)));
+			String assoId = matcher.group(1);
+			newAsso.setIdentifier(assoId);
+			Role role1 = getRole(matcher.group(3));
+			newAsso.setRole1(role1);
+			Role role2 = getRole(matcher.group(4));
+			newAsso.setRole2(role2);
+			setClassAssociations(assoId, role1, role2);
 			newAsso.setDetails(matcher.group());
 			output.add(newAsso);
 		}
@@ -331,6 +335,28 @@ public class Parser {
 		return output;
 	}
 	
+	private static void setClassAssociations(String assoId, Role role1, Role role2) {
+		
+		String name1 = role1.getClass_dec();
+		String name2 = role2.getClass_dec();
+		
+		for(int i=0;i<outputModel.getList_dec().size();i++)
+		{
+			if(outputModel.getList_dec().get(i).getIdentifier().equals(name1))
+			{
+				outputModel.getList_dec().get(i).setAssoFlag(true);
+				outputModel.getList_dec().get(i).addAssoToList("(R) "+assoId);
+			}
+			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
+			{
+				outputModel.getList_dec().get(i).setAssoFlag(true);
+				outputModel.getList_dec().get(i).addAssoToList("(R) "+assoId);
+			}
+		}
+		
+	}
+
+
 	private static Role getRole(String input)
 	{
 		String regex = "CLASS (.*) (.*)";
