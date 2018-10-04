@@ -1,6 +1,6 @@
 package parsingUI; 
 
-public class TestUI {
+public class LaunchUI {
 	public static void main (String[] args) 
 	{
 		ParsInterface f = new ParsInterface();     

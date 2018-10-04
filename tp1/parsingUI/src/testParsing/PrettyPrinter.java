@@ -6,7 +6,7 @@ import java.io.IOException;
 import packageModels.Model;
 import packageModels.Modelable;
 
-public class Launcher {
+public class PrettyPrinter {
 
 	public static void main(String[] args) {
 		

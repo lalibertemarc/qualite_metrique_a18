@@ -36,20 +36,31 @@ public class Parser {
 		if(!isFileCorrupt)
 			outputModel.setDetails(_mainFile);
 		else
-			
-			return new ParsingError(message);
+		{
+			isFileCorrupt=false;
+			return new ParsingError(message);		
+		}
 		if(!isFileCorrupt)
 			outputModel.setList_dec(getClasses());
 		else
-			return new ParsingError(message);;
+		{
+			isFileCorrupt=false;
+			return new ParsingError(message);		
+		}
 		if(!isFileCorrupt)
 			outputModel.setAssociations(getAssociations());
 		else
-			return new ParsingError(message);;
+		{
+			isFileCorrupt=false;
+			return new ParsingError(message);		
+		}
 		if(!isFileCorrupt)
 			outputModel.setAggregations(getAggregations());
 		else
-			return new ParsingError(message);;
+		{
+			isFileCorrupt=false;
+			return new ParsingError(message);		
+		}
 		
 		return outputModel;
 	}
