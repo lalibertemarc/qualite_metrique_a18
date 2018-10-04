@@ -30,7 +30,7 @@ import packageModels.ParsingError;
 
 
 
-public class ParsInterface extends JFrame{
+public class ParseInterface extends JFrame{
 	
 	static final long serialVersionUID = 1L;
 	private JPanel containerNorth = new JPanel();
@@ -64,11 +64,12 @@ public class ParsInterface extends JFrame{
 	private ArrayList<String> mySubClass;
 	
 	Modelable mainModel;
+	Class_dec selectedClass;
 	
 	ArrayList<JList<String>> allList = new ArrayList<JList<String>>();
 	ArrayList<DefaultListModel<String>> allModelList = new ArrayList<DefaultListModel<String>>();
 
-	public ParsInterface(){	
+	public ParseInterface(){	
 
 		//basic appearance 
 		this.setTitle("Parseur");
@@ -93,7 +94,9 @@ public class ParsInterface extends JFrame{
 		    	
 
 		    	adapterlAttributes.clear();
-		    	Class_dec selectedClass =  myClasses.get(selectedIndex);
+		    	selectedClass =  ((Model)mainModel).getList_dec().get(selectedIndex);
+		    	jListAttributes.clearSelection();
+		    	jListMethods.clearSelection();
 		    	myAttributes =(ArrayList<Data_Item>) selectedClass.getAttributes();
 		    	
 		    	
@@ -120,25 +123,45 @@ public class ParsInterface extends JFrame{
 		    	
 		    	initAggAssAdapter(selectedClass);
 		    	
-		    	
-		    	//System.out.println(selectedClass.getDetails().split("\n"));
-//		    	JLabel detailsLabel = new JLabel();
-//		    	detailsLabel.setText(selectedClass.getDetails());
-//		    	details.add(detailsLabel);
-		    	
-		    	
-//		    	my =(ArrayList<String>) selectedClass.getSubclasses();
-//		    	for(int i=0; i< myAggregations.size(); i++) {
-//		    		modelAgr.addElement(myAggregations.get(i));
-//		    	}
-//		    	for(int i=0; i< myAssociations.size(); i++) {
-//		    		modelAgr.addElement(myAssociations.get(i));
-//		    	}
-		    }
-
-			
+		    }	
 		});
 		
+		jListMethods.addListSelectionListener( new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int i = jListMethods.getSelectedIndex();
+				
+				if(i < selectedClass.getOperations().size() && i!= -1) {
+					Operation selectedMethod = selectedClass.getOperations().get(i);
+					
+					adapterDetails.clear();
+					adapterDetails.addElement(selectedMethod.getDetails());
+				}
+				
+				
+			}
+			
+		});
+
+		jListAttributes.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int i = jListAttributes.getSelectedIndex();
+				if(i!=-1)
+				{
+					Data_Item selectedItem = selectedClass.getAttributes().get(i);
+
+					adapterDetails.clear();
+					adapterDetails.addElement(selectedItem.getDetails());
+				}
+				
+
+			}
+
+		});
+	
 		initAllLists();
 		initStyling();
 		initFormating();
@@ -175,7 +198,7 @@ public class ParsInterface extends JFrame{
 		for(int i=0 ;i<allModelList.size();i++)
 			allModelList.get(i).clear();
 	}
-
+	
 	private void initFormating() {
 		classesPanelContainer.add(jListClass);
 		attributesPanelContainer.add(jListAttributes);
@@ -289,28 +312,38 @@ public class ParsInterface extends JFrame{
 				adapterAggregetionsAssociations.addElement("(A) C _ "+roleName);
 			}
 		}
-//		
+		
 //		for(int i=0;i<ass.size();i++)
 //		{
-//			adapterAggregetionsAssociations.addElement(i+"");
+//			//adapterAggregetionsAssociations.addElement(i+"");
 //			Association assNow = ass.get(i);
 //			if(classId.equals(assNow.getRole1().getClass_dec())); 
 //			{
 ////				adapterAggregetionsAssociations.addElement(classId);
 ////				adapterAggregetionsAssociations.addElement(assNow.getRole1().getClass_dec());
+//				String roleToAdd;
+//				if(classId.equals(assNow.getRole2().getClass_dec()))
+//				{
+//					roleToAdd = assNow.getRole1().getClass_dec();
+//				}
+//				else
+//				{
+//					roleToAdd = assNow.getRole2().getClass_dec();
+//				}
+//				
 //				String elementToAdd = "(R) " + 
 //						classId 
 //						+" "+ assNow.getIdentifier() 
 //						+" "+  assNow.getRole2().getMultiplicity() 
-//						+" "+ assNow.getRole2().getClass_dec();
+//						+" "+ roleToAdd;
 //				
 ////				if(!adapterAggregetionsAssociations.contains(elementToAdd))
 ////				{
 //					adapterAggregetionsAssociations.addElement(elementToAdd);
 //				//}
-//				
+				
 //						 
-//			}
+			//}
 //			if(assNow.getRole2().getClass_dec().equals(classId)); 
 //			{
 //				adapterAggregetionsAssociations.addElement(
@@ -320,6 +353,7 @@ public class ParsInterface extends JFrame{
 //						+" "+  assNow.getRole1().getMultiplicity() 
 //						+" " + assNow.getRole1().getClass_dec() );
 //			}
+		//}
 		
 		
 	}

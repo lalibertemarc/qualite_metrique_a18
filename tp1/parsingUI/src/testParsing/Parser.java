@@ -388,6 +388,7 @@ public class Parser {
 			
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
+			aggregation.setDetails(matcher.group());
 			output.add(aggregation);
 		}
 		

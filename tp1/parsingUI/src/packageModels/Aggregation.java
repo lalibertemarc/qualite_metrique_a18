@@ -1,9 +1,10 @@
 package packageModels;
 
-public class Aggregation{
+public class Aggregation implements Modelable{
 
 	private Role container;
 	private Role parts;
+	private String details;
 
 	public Role getContainer() {
 		return this.container;
@@ -22,6 +23,29 @@ public class Aggregation{
 	}
 
 	public Aggregation() {
+		
+	}
+
+	@Override
+	public String getIdentifier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDetails() {
+		return this.details;
+	}
+
+	@Override
+	public void setIdentifier(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDetails(String details) {
+		this.details = details;
 		
 	}
 
