@@ -10,6 +10,7 @@ public class Model implements Modelable {
 	private List<Class_dec> list_dec;
 	private List<Association> associations;
 	private List<Aggregation> aggregations;
+	private String subClassDetails;
 
 	public List<Class_dec> getList_dec() {
 		return this.list_dec;
@@ -37,7 +38,16 @@ public class Model implements Modelable {
 
 	public Model() {
 	}
-
+	
+	public void setSubClassDetails(String sc)
+	{
+		subClassDetails = sc;
+	}
+	
+	public String getSubClassDetails()
+	{
+		return subClassDetails;
+	}
 	@Override
 	public String getIdentifier() {
 		return identifier;

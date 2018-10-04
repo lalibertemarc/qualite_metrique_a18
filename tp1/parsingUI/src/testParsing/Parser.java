@@ -20,6 +20,7 @@ public class Parser {
 	static String _mainFile;
 	static boolean isFileCorrupt;
 	static String message;
+	static Model outputModel;
 
 	
 	public static Modelable getModel(String input)
@@ -28,13 +29,13 @@ public class Parser {
 			return null;
 		}
 		_mainFile = input;
-		Model outputModel = new Model();
+		outputModel = new Model();
 		
 	
 		outputModel.setIdentifier(getModelId());
 	
 		if(!isFileCorrupt)
-			outputModel.setDetails(_mainFile);
+			outputModel.setDetails("<html>"+_mainFile.replace("\n", "<br>")+"<html>");
 		else
 		{
 			isFileCorrupt=false;
@@ -168,6 +169,9 @@ public class Parser {
 				return null;
 				
 			}
+			//html formatting for UI
+			outputModel.setSubClassDetails("<html>"+matcher.group().replaceAll("\n","<br>")+"</html>");
+			
 			String[] classes = matcher.group(2).split(", ");
 			for(int i = 0 ;i<classes.length;i++)
 			{
@@ -227,7 +231,7 @@ public class Parser {
 				if(opMatcher.find())
 				{
 					name = opMatcher.group(1);
-					type = opMatcher.group(2);
+					type = opMatcher.group(2).replace(",", "");
 				}
 				
 				if(name.equals("") || type.equals(""))
@@ -388,7 +392,7 @@ public class Parser {
 			
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
-			aggregation.setDetails(matcher.group());
+			aggregation.setDetails("<html>"+matcher.group().replaceAll("\n", "<br>")+"</html>");
 			output.add(aggregation);
 		}
 		

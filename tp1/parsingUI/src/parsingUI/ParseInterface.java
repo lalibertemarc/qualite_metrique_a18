@@ -41,22 +41,22 @@ public class ParseInterface extends JFrame{
 	private PanelContainer attributesPanelContainer = new PanelContainer("Attributs");
 	private PanelContainer methodsPanelContainer = new PanelContainer("Methodes");
 	private PanelContainer sousClassesPanelContainer = new PanelContainer("Sub Classes");
-	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Agregation");
+	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Aggregation");
 	private PanelContainer detailsPanelContainer = new PanelContainer("Details");
 	
-	private DefaultListModel<String> adatperClassDec = new DefaultListModel<String>();
-	private DefaultListModel<String> adapterlAttributes = new DefaultListModel<String>();
-	private DefaultListModel<String> adapterOperations = new DefaultListModel<String>();
-	private DefaultListModel<String> adapterSubClasses = new DefaultListModel<String>();
-	private DefaultListModel<String> adapterAggregetionsAssociations = new DefaultListModel<String>();
-	private DefaultListModel<String> adapterDetails = new DefaultListModel<String>();
+	private DefaultListModel<String> adatperClassDec;
+	private DefaultListModel<String> adapterlAttributes ;
+	private DefaultListModel<String> adapterOperations ;
+	private DefaultListModel<String> adapterSubClasses;
+	private DefaultListModel<String> adapterAggregetionsAssociations ;
+	private DefaultListModel<String> adapterDetails ;
 
-	JList<String> jListClass = new JList<>(adatperClassDec);
-	JList<String> jListAttributes= new JList<>(adapterlAttributes);
-	JList<String> jListMethods= new JList<>(adapterOperations);
-	JList<String> jListSubClass= new JList<>(adapterSubClasses);
-	JList<String> jListAggregations= new JList<>(adapterAggregetionsAssociations);
-	JList<String> jListDetails= new JList<>(adapterDetails);
+	JList<String> jListClass ;
+	JList<String> jListAttributes;
+	JList<String> jListMethods;
+	JList<String> jListSubClass;
+	JList<String> jListAggregations;
+	JList<String> jListDetails;
 	
 	private ArrayList<Class_dec> myClasses;
 	private ArrayList<Data_Item> myAttributes;
@@ -82,7 +82,56 @@ public class ParseInterface extends JFrame{
 		
 		this.getContentPane().add(containerNorth);
 		
-
+		
+		initJList();
+		
+		
+		selectFile.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				clearAllList();
+				selectedClass=null;
+				File inputFile = chooseFile();
+				
+				if(inputFile==null)
+					return;
+				
+				String fullPath = inputFile.getAbsolutePath();
+				filePathTextField.setText(fullPath);	
+				String toParse = "";
+				
+				try {
+					toParse = scanFile(inputFile);
+				} catch (IOException er) {
+					clearAllList();
+					er.printStackTrace();
+				}
+			
+				Modelable model = Parser.getModel(toParse);
+				
+				if(model instanceof ParsingError) 
+				{
+					new JOptionPane();
+					JOptionPane.showMessageDialog(null, ((ParsingError)model).getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+					clearAllList();
+				}
+				else 
+				{
+					mainModel = model;
+					//load all classes by default
+					myClasses = (ArrayList<Class_dec>) ((Model)model).getList_dec();
+					adatperClassDec.clear();
+					for(Class_dec c : myClasses) 
+					{
+						adatperClassDec.addElement(c.getIdentifier());
+					}
+					
+					classesPanelContainer.add(jListClass);
+					adapterDetails.clear();
+					adapterDetails.addElement(model.getDetails());
+				}	
+			}
+		});
 		//event listener for the list of Classes
 		jListClass.addListSelectionListener(new ListSelectionListener(){
 		    public void valueChanged(ListSelectionEvent e) {
@@ -92,7 +141,9 @@ public class ParseInterface extends JFrame{
 		    	
 		    	int selectedIndex =jListClass.getSelectedIndex();
 		    	
-
+		    	if(selectedIndex==-1)
+		    		return;
+		    	
 		    	adapterlAttributes.clear();
 		    	selectedClass =  ((Model)mainModel).getList_dec().get(selectedIndex);
 		    	jListAttributes.clearSelection();
@@ -131,7 +182,7 @@ public class ParseInterface extends JFrame{
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				int i = jListMethods.getSelectedIndex();
-				
+			
 				if(i < selectedClass.getOperations().size() && i!= -1) {
 					Operation selectedMethod = selectedClass.getOperations().get(i);
 					
@@ -156,10 +207,37 @@ public class ParseInterface extends JFrame{
 					adapterDetails.clear();
 					adapterDetails.addElement(selectedItem.getDetails());
 				}
-				
-
 			}
+		});
+		
+		jListSubClass.addListSelectionListener(new ListSelectionListener() {
 
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				adapterDetails.clear();
+				adapterDetails.addElement(((Model)mainModel).getSubClassDetails());
+			}
+			
+		});
+		
+		jListAggregations.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int i = jListAggregations.getSelectedIndex();
+				
+				if(i==-1)
+					return;
+				String element = adapterAggregetionsAssociations.getElementAt(i);
+				if(element.contains("(A)"))
+				{
+					adapterDetails.clear();
+					//TODO find corresponding aggregation, not hardcoded first one
+					adapterDetails.addElement(((Model)mainModel).getAggregations().get(0).getDetails());
+				}
+				
+			}
+			
 		});
 	
 		initAllLists();
@@ -177,6 +255,22 @@ public class ParseInterface extends JFrame{
 		this.setVisible(true);		
 	}
 
+	private void initJList() {
+		adatperClassDec = new DefaultListModel<String>();
+		adapterlAttributes = new DefaultListModel<String>();
+		adapterOperations = new DefaultListModel<String>();
+		adapterSubClasses = new DefaultListModel<String>();
+		adapterAggregetionsAssociations = new DefaultListModel<String>();
+		adapterDetails = new DefaultListModel<String>();
+
+		jListClass = new JList<>(adatperClassDec);
+		jListAttributes= new JList<>(adapterlAttributes);
+		jListMethods= new JList<>(adapterOperations);
+		jListSubClass= new JList<>(adapterSubClasses);
+		jListAggregations= new JList<>(adapterAggregetionsAssociations);
+		jListDetails= new JList<>(adapterDetails);	
+	}
+
 	private void initAllLists() {
 		allList.add(jListClass);
 		allList.add(jListAttributes);
@@ -185,9 +279,9 @@ public class ParseInterface extends JFrame{
 		allList.add(jListMethods);
 		allList.add(jListSubClass);
 		
-		allModelList.add(adapterAggregetionsAssociations);
-		allModelList.add(adapterlAttributes);
 		allModelList.add(adatperClassDec);
+		allModelList.add(adapterAggregetionsAssociations);
+		allModelList.add(adapterlAttributes);	
 		allModelList.add(adapterDetails);
 		allModelList.add(adapterOperations);
 		allModelList.add(adapterSubClasses);
@@ -195,8 +289,15 @@ public class ParseInterface extends JFrame{
 	
 	private void clearAllList()
 	{
+		for(int i =0 ;i<allList.size();i++)
+		{
+			allList.get(i).clearSelection();
+		}
 		for(int i=0 ;i<allModelList.size();i++)
+		{
 			allModelList.get(i).clear();
+		}
+			
 	}
 	
 	private void initFormating() {
@@ -205,7 +306,7 @@ public class ParseInterface extends JFrame{
 		methodsPanelContainer.add(jListMethods);
 		sousClassesPanelContainer.add(jListSubClass);
 		associationsPanelContainer.add(jListAggregations);
-		detailsPanelContainer.add(jListDetails);
+		detailsPanelContainer.add(new JScrollPane(jListDetails));
 		
 		classesPanelContainer.setBounds(10, 100, 300, 850);
 		attributesPanelContainer.setBounds(320, 100, 300, 260);
@@ -239,49 +340,6 @@ public class ParseInterface extends JFrame{
 		
 		// select zone
 		selectFile.setPreferredSize(new Dimension(200, 50));
-		selectFile.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				File inputFile = chooseFile();
-				
-				if(inputFile==null)
-					return;
-				
-				String fullPath = inputFile.getAbsolutePath();
-				filePathTextField.setText(fullPath);	
-				String toParse = "";
-				
-				try {
-					toParse = scanFile(inputFile);
-				} catch (IOException er) {
-					clearAllList();
-					er.printStackTrace();
-				}
-			
-				Modelable model = Parser.getModel(toParse);
-				
-				System.out.println(model.getIdentifier());
-				if(model instanceof ParsingError) 
-				{
-					new JOptionPane();
-					JOptionPane.showMessageDialog(null, ((ParsingError)model).getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-					clearAllList();
-				}
-				else 
-				{
-					mainModel = model;
-					//load all classes by default
-					myClasses = (ArrayList<Class_dec>) ((Model)model).getList_dec();
-					adatperClassDec.clear();
-					for(Class_dec c : myClasses) 
-					{
-						adatperClassDec.addElement(c.getIdentifier());
-					}
-
-					classesPanelContainer.add(jListClass);	
-				}	
-			}
-		});
 
 		filePathTextField.setBorder(BorderFactory.createLineBorder(Color.black));
 		containerNorth.setLayout(new BorderLayout(10, 10));
