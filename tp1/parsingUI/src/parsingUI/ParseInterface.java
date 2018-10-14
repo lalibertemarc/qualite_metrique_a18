@@ -30,6 +30,7 @@ public class ParseInterface extends JFrame{
 	private JPanel containerNorth = new JPanel();
 	private JTextField filePathTextField = new JTextField();
 	private JButton selectFile = new JButton("Load File");
+	private JButton calcMetric = new JButton("Calculate Metrics");
 	
 	private PanelContainer classesPanelContainer = new PanelContainer("Classes");
 	private PanelContainer attributesPanelContainer = new PanelContainer("Attributs");
@@ -37,6 +38,8 @@ public class ParseInterface extends JFrame{
 	private PanelContainer sousClassesPanelContainer = new PanelContainer("Sub Classes");
 	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Relations");
 	private PanelContainer detailsPanelContainer = new PanelContainer("Details");
+	private PanelContainer metricsPanelContainer = new PanelContainer("Metrics");
+	
 	
 	private DefaultListModel<String> adatperClassDec;
 	private DefaultListModel<String> adapterAttributes ;
@@ -44,19 +47,22 @@ public class ParseInterface extends JFrame{
 	private DefaultListModel<String> adapterSubClasses;
 	private DefaultListModel<String> adapterAggregetionsAssociations ;
 	private DefaultListModel<String> adapterDetails ;
-
+	private DefaultListModel<String> adapterMetrics ;
+	
+	
 	JList<String> jListClass ;
 	JList<String> jListAttributes;
 	JList<String> jListMethods;
 	JList<String> jListSubClass;
 	JList<String> jListAggregations;
 	JList<String> jListDetails;
+	JList<String> jListMetrics;
 	
 	private ArrayList<Class_dec> myClasses;
 	private ArrayList<Data_Item> myAttributes;
 	private ArrayList<Operation> myMethods;
 	private ArrayList<String> mySubClass;
-	
+	private ArrayList<String> myMetrics;
 	Modelable mainModel;
 	Class_dec selectedClass;
 	
@@ -68,7 +74,7 @@ public class ParseInterface extends JFrame{
 		//basic appearance 
 		this.setTitle("Parseur");
 		//this.setPreferredSize(new Dimension(800, 800));
-		this.setSize(800, 800);
+		this.setSize(1050, 800);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setLayout(null); 
@@ -124,6 +130,16 @@ public class ParseInterface extends JFrame{
 			}
 		});
 
+		calcMetric.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		jListClass.addListSelectionListener(new ListSelectionListener(){
 		    public void valueChanged(ListSelectionEvent e) {
 		    	if(e.getValueIsAdjusting()) {
@@ -256,7 +272,17 @@ public class ParseInterface extends JFrame{
 				}
 			}		
 		});
-	
+		
+		jListMetrics.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		initAllLists();
 		initStyling();
 		initFormating();
@@ -267,6 +293,7 @@ public class ParseInterface extends JFrame{
 		this.getContentPane().add(sousClassesPanelContainer);
 		this.getContentPane().add(associationsPanelContainer);
 		this.getContentPane().add(detailsPanelContainer);
+		this.getContentPane().add(metricsPanelContainer);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
 		this.setVisible(true);		
@@ -279,6 +306,7 @@ public class ParseInterface extends JFrame{
 		adapterSubClasses = new DefaultListModel<String>();
 		adapterAggregetionsAssociations = new DefaultListModel<String>();
 		adapterDetails = new DefaultListModel<String>();
+		adapterMetrics = new DefaultListModel<String>();
 
 		jListClass = new JList<>(adatperClassDec);
 		jListAttributes= new JList<>(adapterAttributes);
@@ -286,6 +314,7 @@ public class ParseInterface extends JFrame{
 		jListSubClass= new JList<>(adapterSubClasses);
 		jListAggregations= new JList<>(adapterAggregetionsAssociations);
 		jListDetails= new JList<>(adapterDetails);	
+		jListMetrics = new JList<>(adapterMetrics);
 	}
 
 	private void initAllLists() {
@@ -345,6 +374,7 @@ public class ParseInterface extends JFrame{
 		sousClassesPanelContainer.add(jListSubClass);
 		associationsPanelContainer.add(jListAggregations);
 		detailsPanelContainer.add(new JScrollPane(jListDetails));
+		metricsPanelContainer.add(jListMetrics);
 		
 		classesPanelContainer.setBounds(10, 100, 230, 650);
 		attributesPanelContainer.setBounds(250, 100, 240, 210);
@@ -352,6 +382,7 @@ public class ParseInterface extends JFrame{
 		sousClassesPanelContainer.setBounds(250, 320, 240, 210);
 		associationsPanelContainer.setBounds(500, 320, 280, 210);
 		detailsPanelContainer.setBounds(250, 540, 530, 210);
+		metricsPanelContainer.setBounds(800, 100, 230, 650);
 		
 	}
 
@@ -364,7 +395,7 @@ public class ParseInterface extends JFrame{
 		jListSubClass.setFont(new Font("Areal", Font.PLAIN, 14));
 		jListAggregations.setFont(new Font("Areal", Font.PLAIN, 14));
 		jListDetails.setFont(new Font("Areal", Font.PLAIN, 14));
-
+		jListMetrics.setFont(new Font("Areal", Font.PLAIN, 14));
 		//set list container styling
 		classesPanelContainer.setLayout(new BorderLayout());
 		attributesPanelContainer.setLayout(new BorderLayout());
@@ -372,20 +403,23 @@ public class ParseInterface extends JFrame{
 		sousClassesPanelContainer.setLayout(new BorderLayout());
 		associationsPanelContainer.setLayout(new BorderLayout());
 		detailsPanelContainer.setLayout(new BorderLayout());
+		metricsPanelContainer.setLayout(new BorderLayout());
 		
 		//set a background color
 		containerNorth.setBackground(new Color(240,248,255));
 		
 		// select zone
-		selectFile.setPreferredSize(new Dimension(200, 50));
-
+		selectFile.setPreferredSize(new Dimension(220, 50));
+		calcMetric.setPreferredSize(new Dimension(220, 50));
+		
 		filePathTextField.setBorder(BorderFactory.createLineBorder(Color.black));
+		filePathTextField.setPreferredSize(new Dimension(600,50));
 		containerNorth.setLayout(new BorderLayout(10, 10));
-		containerNorth.setPreferredSize(new Dimension(900, 100));
 		containerNorth.add(selectFile, BorderLayout.WEST);
+		containerNorth.add(calcMetric,BorderLayout.EAST);
 		containerNorth.add(filePathTextField, BorderLayout.CENTER);
 		containerNorth.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		containerNorth.setBounds(0, 0, 800, 100);
+		containerNorth.setBounds(0, 0, 1030, 100);
 	}
 
 	private void initAggAssAdapter(Class_dec c) {
