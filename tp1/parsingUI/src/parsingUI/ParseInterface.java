@@ -178,8 +178,10 @@ public class ParseInterface extends JFrame{
 		    	adapterDetails.clear();
 		    	fillDetails(selectedClass.getDetails());
 		    	initAggAssAdapter(selectedClass);
+		    	fillMetrics(selectedClass);
 		    	
-		    }	
+		    }
+	
 		});
 		
 		jListMethods.addListSelectionListener( new ListSelectionListener() {
@@ -331,6 +333,17 @@ public class ParseInterface extends JFrame{
 		allModelList.add(adapterDetails);
 		allModelList.add(adapterOperations);
 		allModelList.add(adapterSubClasses);
+	}
+
+	private void fillMetrics(Class_dec selectedClass) 
+	{
+		adapterMetrics.clear();
+		
+		for(int i=0;i<selectedClass.getAllMetrics().size();i++)
+		{
+			adapterMetrics.addElement(selectedClass.getAllMetrics().get(i));
+		}
+		
 	}
 	
 	private void clearAllList()
