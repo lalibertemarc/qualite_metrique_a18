@@ -3,6 +3,8 @@ package packageModels;
 import java.util.ArrayList;
 import java.util.List;
 
+import testParsing.Parser;
+
 public class Class_dec implements Modelable,Metricable {
 
 	private String identifier;
@@ -86,6 +88,12 @@ public class Class_dec implements Modelable,Metricable {
 	}
 
 	//Metricable methods
+	
+	/*
+	use this for metrics
+	get all classes from Parser
+	ArrayList<Class_dec> allClasses = (ArrayList<Class_dec>) Parser.getAllClasses();
+	*/
 	
 	//ANA
 	@Override

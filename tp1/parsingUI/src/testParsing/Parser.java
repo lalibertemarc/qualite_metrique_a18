@@ -429,4 +429,22 @@ public class Parser {
 		return output;
 	}
 	
+	//helper classes
+	public static Class_dec findClassById(String name)
+	{
+		for(int i=0;i<outputModel.getList_dec().size() ;i++)
+		{
+			if(outputModel.getList_dec().get(i).getIdentifier().equals(name))
+			{
+				return outputModel.getList_dec().get(i);
+			}
+		}
+		return null;
+	}
+	
+	public static List<Class_dec> getAllClasses()
+	{
+		return outputModel.getList_dec();
+	}
+	
 }
