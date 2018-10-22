@@ -26,7 +26,8 @@ public class Parser {
 	public static Modelable getModel(String input)
 	{
 		if(input.length()==0){
-			return null;
+			message = "Empty File.";
+			return new ParsingError(message);
 		}
 		_mainFile = input;
 		outputModel = new Model();
@@ -86,8 +87,9 @@ public class Parser {
 		if(id.equals(""))
 		{
 			isFileCorrupt = true;
+			message="empty model name";
 			return null;
-			//message=empty model name
+			
 		}
 		return id;
 	}
@@ -169,7 +171,7 @@ public class Parser {
 				return null;
 				
 			}
-			//html formatting for UI
+			
 			outputModel.setSubClassDetails("<html>"+matcher.group().replaceAll("\n","<br>")+"</html>");
 			
 			String[] classes = matcher.group(2).split(", ");
@@ -218,7 +220,6 @@ public class Parser {
 			for(int i=0;i<opAr.length;i++)
 			{
 				Operation newOp = new Operation();
-				//String item = opAr[i].replaceAll("\\s+","");
 				String item = opAr[i];
 				
 				if(item.equals(";"))
@@ -240,7 +241,6 @@ public class Parser {
 					isFileCorrupt = true;
 					message="Malformed operation declaration, name or type cannot be empty";
 					return null;
-					
 				}
 				newOp.setArg_list(getOpArgs(name));
 				newOp.setIdentifier(name);
@@ -248,7 +248,6 @@ public class Parser {
 				newOp.setType(type);
 				output.add(newOp);
 			}
-			
 		}
 		
 		return output;
@@ -300,14 +299,11 @@ public class Parser {
 		Matcher matcher = classDetails.matcher(_mainFile);
 		String details = "";
 		
-		//need to format in html for jlist UI
 		if(matcher.find())
 		{
-			//details = "<html>"+ matcher.group().replace("\n", "<br>")+"<html>";
 			details = matcher.group();
 		}
 			
-
 		return details;	
 	}
 	
@@ -413,7 +409,7 @@ public class Parser {
 	}
 	
 	private static List<Aggregation> getAggregations() {
-		String regex = "AGGREGATION (.*)\\n(.*)\\n(.*)\\n(.*)\\n(.*)\\n;";
+		String regex = "AGGREGATION(.*)\\n(.*)\\n(.*)\\n(.*)\\n(.*)\\n;";
 		Pattern aggPattern = Pattern.compile(regex);
 		Matcher matcher = aggPattern.matcher(_mainFile);
 		List<Aggregation> output = new ArrayList<Aggregation>();
@@ -431,6 +427,24 @@ public class Parser {
 		}
 		
 		return output;
+	}
+	
+	//helper classes
+	public static Class_dec findClassById(String name)
+	{
+		for(int i=0;i<outputModel.getList_dec().size() ;i++)
+		{
+			if(outputModel.getList_dec().get(i).getIdentifier().equals(name))
+			{
+				return outputModel.getList_dec().get(i);
+			}
+		}
+		return null;
+	}
+	
+	public static List<Class_dec> getAllClasses()
+	{
+		return outputModel.getList_dec();
 	}
 	
 }

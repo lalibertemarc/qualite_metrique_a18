@@ -10,14 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 import testParsing.Parser;
-import testParsing.PrinterHelper;
 import packageModels.Aggregation;
 import packageModels.Association;
 import packageModels.Class_dec;
@@ -28,14 +24,13 @@ import packageModels.Operation;
 import packageModels.ParsingError;
 
 
-
-
 public class ParseInterface extends JFrame{
 	
 	static final long serialVersionUID = 1L;
 	private JPanel containerNorth = new JPanel();
 	private JTextField filePathTextField = new JTextField();
 	private JButton selectFile = new JButton("Load File");
+	private JButton calcMetric = new JButton("Calculate Metrics");
 	
 	private PanelContainer classesPanelContainer = new PanelContainer("Classes");
 	private PanelContainer attributesPanelContainer = new PanelContainer("Attributs");
@@ -43,6 +38,8 @@ public class ParseInterface extends JFrame{
 	private PanelContainer sousClassesPanelContainer = new PanelContainer("Sub Classes");
 	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Relations");
 	private PanelContainer detailsPanelContainer = new PanelContainer("Details");
+	private PanelContainer metricsPanelContainer = new PanelContainer("Metrics");
+	
 	
 	private DefaultListModel<String> adatperClassDec;
 	private DefaultListModel<String> adapterAttributes ;
@@ -50,19 +47,22 @@ public class ParseInterface extends JFrame{
 	private DefaultListModel<String> adapterSubClasses;
 	private DefaultListModel<String> adapterAggregetionsAssociations ;
 	private DefaultListModel<String> adapterDetails ;
-
+	private DefaultListModel<String> adapterMetrics ;
+	
+	
 	JList<String> jListClass ;
 	JList<String> jListAttributes;
 	JList<String> jListMethods;
 	JList<String> jListSubClass;
 	JList<String> jListAggregations;
 	JList<String> jListDetails;
+	JList<String> jListMetrics;
 	
 	private ArrayList<Class_dec> myClasses;
 	private ArrayList<Data_Item> myAttributes;
 	private ArrayList<Operation> myMethods;
 	private ArrayList<String> mySubClass;
-	
+	private ArrayList<String> myMetrics;
 	Modelable mainModel;
 	Class_dec selectedClass;
 	
@@ -73,18 +73,15 @@ public class ParseInterface extends JFrame{
 
 		//basic appearance 
 		this.setTitle("Parseur");
-		this.setPreferredSize(new Dimension(1000, 1000));
-		this.setSize(800, 800);
+		//this.setPreferredSize(new Dimension(800, 800));
+		this.setSize(1050, 800);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setLayout(null); 
 		this.getContentPane().setBackground(new Color(240,248,255));
-		
 		this.getContentPane().add(containerNorth);
 		
-		
 		initJList();
-		
 		
 		selectFile.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -128,12 +125,21 @@ public class ParseInterface extends JFrame{
 					
 					classesPanelContainer.add(jListClass);
 					adapterDetails.clear();
-					//adapterDetails.addElement(model.getDetails());
 					fillDetails(model.getDetails());
 				}	
 			}
 		});
-		//event listener for the list of Classes
+
+		calcMetric.addActionListener( new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		jListClass.addListSelectionListener(new ListSelectionListener(){
 		    public void valueChanged(ListSelectionEvent e) {
 		    	if(e.getValueIsAdjusting()) {
@@ -153,17 +159,14 @@ public class ParseInterface extends JFrame{
 		    	jListDetails.clearSelection();
 		    	myAttributes =(ArrayList<Data_Item>) selectedClass.getAttributes();
 		    	
-		    	
 		    	for(int i=0; i< myAttributes.size(); i++)
 		    		adapterAttributes.addElement(myAttributes.get(i).getIdentifier() + " : " + myAttributes.get(i).getType());
 		    		
-		    	
 		    	adapterOperations.clear();
 		    	myMethods =(ArrayList<Operation>) selectedClass.getOperations();
 		    	for(int i=0; i< myMethods.size(); i++)
 		    		adapterOperations.addElement(myMethods.get(i).getIdentifier() + ":" + myMethods.get(i).getType());
 		    
-		    	
 		    	mySubClass =(ArrayList<String>) selectedClass.getSubclasses();
 		    	adapterSubClasses.clear();
 		    	if(mySubClass!=null) {
@@ -173,11 +176,12 @@ public class ParseInterface extends JFrame{
 			    	}
 		    	}
 		    	adapterDetails.clear();
-		    	//adapterDetails.addElement(selectedClass.getDetails());
 		    	fillDetails(selectedClass.getDetails());
 		    	initAggAssAdapter(selectedClass);
+		    	fillMetrics(selectedClass);
 		    	
-		    }	
+		    }
+	
 		});
 		
 		jListMethods.addListSelectionListener( new ListSelectionListener() {
@@ -196,9 +200,7 @@ public class ParseInterface extends JFrame{
 				fillDetails(selectedClass.getDetails());
 				
 				String element = adapterOperations.getElementAt(i);
-				scanDetails(element);
-				
-				
+				scanDetails(element);	
 			}
 			
 		});
@@ -208,11 +210,11 @@ public class ParseInterface extends JFrame{
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				
-				int i = jListAttributes.getSelectedIndex();
-				
+				int i = jListAttributes.getSelectedIndex();				
 				
 				if(i==-1)
 					return;
+				
 				jListMethods.clearSelection();
 				jListAggregations.clearSelection();
 				jListSubClass.clearSelection();
@@ -241,6 +243,7 @@ public class ParseInterface extends JFrame{
 				
 				if(i==-1)
 					return;
+				
 				jListMethods.clearSelection();
 				jListAttributes.clearSelection();
 				jListDetails.clearSelection();
@@ -269,11 +272,19 @@ public class ParseInterface extends JFrame{
 						}
 					}
 				}
+			}		
+		});
+		
+		jListMetrics.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
 				
 			}
 			
 		});
-	
+		
 		initAllLists();
 		initStyling();
 		initFormating();
@@ -284,6 +295,7 @@ public class ParseInterface extends JFrame{
 		this.getContentPane().add(sousClassesPanelContainer);
 		this.getContentPane().add(associationsPanelContainer);
 		this.getContentPane().add(detailsPanelContainer);
+		this.getContentPane().add(metricsPanelContainer);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    
 		this.setVisible(true);		
@@ -296,6 +308,7 @@ public class ParseInterface extends JFrame{
 		adapterSubClasses = new DefaultListModel<String>();
 		adapterAggregetionsAssociations = new DefaultListModel<String>();
 		adapterDetails = new DefaultListModel<String>();
+		adapterMetrics = new DefaultListModel<String>();
 
 		jListClass = new JList<>(adatperClassDec);
 		jListAttributes= new JList<>(adapterAttributes);
@@ -303,6 +316,7 @@ public class ParseInterface extends JFrame{
 		jListSubClass= new JList<>(adapterSubClasses);
 		jListAggregations= new JList<>(adapterAggregetionsAssociations);
 		jListDetails= new JList<>(adapterDetails);	
+		jListMetrics = new JList<>(adapterMetrics);
 	}
 
 	private void initAllLists() {
@@ -319,6 +333,17 @@ public class ParseInterface extends JFrame{
 		allModelList.add(adapterDetails);
 		allModelList.add(adapterOperations);
 		allModelList.add(adapterSubClasses);
+	}
+
+	private void fillMetrics(Class_dec selectedClass) 
+	{
+		adapterMetrics.clear();
+		
+		for(int i=0;i<selectedClass.getAllMetrics().size();i++)
+		{
+			adapterMetrics.addElement(selectedClass.getAllMetrics().get(i));
+		}
+		
 	}
 	
 	private void clearAllList()
@@ -362,6 +387,7 @@ public class ParseInterface extends JFrame{
 		sousClassesPanelContainer.add(jListSubClass);
 		associationsPanelContainer.add(jListAggregations);
 		detailsPanelContainer.add(new JScrollPane(jListDetails));
+		metricsPanelContainer.add(jListMetrics);
 		
 		classesPanelContainer.setBounds(10, 100, 230, 650);
 		attributesPanelContainer.setBounds(250, 100, 240, 210);
@@ -369,6 +395,7 @@ public class ParseInterface extends JFrame{
 		sousClassesPanelContainer.setBounds(250, 320, 240, 210);
 		associationsPanelContainer.setBounds(500, 320, 280, 210);
 		detailsPanelContainer.setBounds(250, 540, 530, 210);
+		metricsPanelContainer.setBounds(800, 100, 230, 650);
 		
 	}
 
@@ -381,7 +408,7 @@ public class ParseInterface extends JFrame{
 		jListSubClass.setFont(new Font("Areal", Font.PLAIN, 14));
 		jListAggregations.setFont(new Font("Areal", Font.PLAIN, 14));
 		jListDetails.setFont(new Font("Areal", Font.PLAIN, 14));
-
+		jListMetrics.setFont(new Font("Areal", Font.PLAIN, 14));
 		//set list container styling
 		classesPanelContainer.setLayout(new BorderLayout());
 		attributesPanelContainer.setLayout(new BorderLayout());
@@ -389,20 +416,23 @@ public class ParseInterface extends JFrame{
 		sousClassesPanelContainer.setLayout(new BorderLayout());
 		associationsPanelContainer.setLayout(new BorderLayout());
 		detailsPanelContainer.setLayout(new BorderLayout());
+		metricsPanelContainer.setLayout(new BorderLayout());
 		
 		//set a background color
 		containerNorth.setBackground(new Color(240,248,255));
 		
 		// select zone
-		selectFile.setPreferredSize(new Dimension(200, 50));
-
+		selectFile.setPreferredSize(new Dimension(220, 50));
+		calcMetric.setPreferredSize(new Dimension(220, 50));
+		
 		filePathTextField.setBorder(BorderFactory.createLineBorder(Color.black));
+		filePathTextField.setPreferredSize(new Dimension(600,50));
 		containerNorth.setLayout(new BorderLayout(10, 10));
-		containerNorth.setPreferredSize(new Dimension(900, 100));
 		containerNorth.add(selectFile, BorderLayout.WEST);
+		containerNorth.add(calcMetric,BorderLayout.EAST);
 		containerNorth.add(filePathTextField, BorderLayout.CENTER);
 		containerNorth.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		containerNorth.setBounds(0, 0, 1000, 100);
+		containerNorth.setBounds(0, 0, 1030, 100);
 	}
 
 	private void initAggAssAdapter(Class_dec c) {
@@ -433,7 +463,6 @@ public class ParseInterface extends JFrame{
 				adapterAggregetionsAssociations.addElement(c.getAssoList().get(i));
 			}
 		}
-		
 	}
 	
 	
@@ -446,9 +475,8 @@ public class ParseInterface extends JFrame{
 		  {
 			  inputFile += st+"\n"; 
 		  } 
-		  return inputFile;
+		  return inputFile.replace(" \n", "\n");
 	}
-	
 	
 	//open a window dialog
 	public File chooseFile() 
@@ -473,4 +501,3 @@ public class ParseInterface extends JFrame{
 	}
 
 }
-

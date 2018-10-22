@@ -39,6 +39,7 @@ public class Model implements Modelable {
 	public Model() {
 	}
 	
+	
 	public void setSubClassDetails(String sc)
 	{
 		subClassDetails = sc;

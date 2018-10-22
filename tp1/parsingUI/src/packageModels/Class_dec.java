@@ -3,7 +3,9 @@ package packageModels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Class_dec implements Modelable {
+import testParsing.Parser;
+
+public class Class_dec implements Modelable,Metricable {
 
 	private String identifier;
 	private String details;
@@ -84,6 +86,111 @@ public class Class_dec implements Modelable {
 		this.details=details;
 		
 	}
+
+	//Metricable methods
+	
+	/*
+	use this for metrics
+	get all classes from Parser
+	ArrayList<Class_dec> allClasses = (ArrayList<Class_dec>) Parser.getAllClasses();
+	*/
+	
+	//ANA
+	@Override
+	public int getAverageMethodArgumentCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//NOM
+	@Override
+	public int getMethodCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//NOA
+	@Override
+	public int getAttributeCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//ITC
+	@Override
+	public int getModelableArgumentCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//ETC
+	@Override
+	public int getTimesUsedAsArgument() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//CAC
+	@Override
+	public int getAssociationCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//DIT
+	@Override
+	public int getLongestPathLengthToRoot() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//CLD
+	@Override
+	public int getLongestPathLengthtoLeaf() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//NOC
+	@Override
+	public int getDirectSubClassCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//NOC
+	@Override
+	public int getSubClassCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	//Required for UI
+	@Override
+	public List<String> getAllMetrics() {
+		ArrayList<String> output = new ArrayList<String>();
+		
+		output.add("ANA: " + getAverageMethodArgumentCount());
+		output.add("NOM: " + getMethodCount());
+		output.add("NOA: " + getAttributeCount());
+		output.add("ITC: " + getModelableArgumentCount());
+		output.add("ETC: " + getTimesUsedAsArgument());
+		output.add("CAC: " + getAssociationCount());
+		output.add("DIT: " + getLongestPathLengthToRoot());
+		output.add("CLD: " + getLongestPathLengthtoLeaf());
+		output.add("NOC: " + getDirectSubClassCount());
+		output.add("NOD: " + getSubClassCount());
+		
+		return output;	
+	}
+	
+	//Optionnal Helpers
+	@Override
+	public int getMethodArgumentCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 
 }
