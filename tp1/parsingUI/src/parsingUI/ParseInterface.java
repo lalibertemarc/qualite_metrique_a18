@@ -74,7 +74,7 @@ public class ParseInterface extends JFrame{
 		//basic appearance 
 		this.setTitle("Parseur");
 		this.setPreferredSize(new Dimension(1000, 1000));
-		this.setSize(1000, 1000);
+		this.setSize(800, 800);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setLayout(null); 
@@ -363,12 +363,12 @@ public class ParseInterface extends JFrame{
 		associationsPanelContainer.add(jListAggregations);
 		detailsPanelContainer.add(new JScrollPane(jListDetails));
 		
-		classesPanelContainer.setBounds(10, 100, 300, 830);
-		attributesPanelContainer.setBounds(320, 100, 300, 260);
-		methodsPanelContainer.setBounds(630, 100, 360, 260);
-		sousClassesPanelContainer.setBounds(320, 370, 300, 240);
-		associationsPanelContainer.setBounds(630, 370, 360, 240);
-		detailsPanelContainer.setBounds(320, 630, 670, 300);
+		classesPanelContainer.setBounds(10, 100, 230, 650);
+		attributesPanelContainer.setBounds(250, 100, 240, 210);
+		methodsPanelContainer.setBounds(500, 100, 280, 210);
+		sousClassesPanelContainer.setBounds(250, 320, 240, 210);
+		associationsPanelContainer.setBounds(500, 320, 280, 210);
+		detailsPanelContainer.setBounds(250, 540, 530, 210);
 		
 	}
 
