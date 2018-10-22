@@ -1,0 +1,365 @@
+MODEL TP1
+CLASS Modelable
+ATTRIBUTES
+	noAttributes : interfaceClass
+OPERATIONS
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void
+;
+
+CLASS Returnable
+ATTRIBUTES
+	noAttributes : interfaceClass
+OPERATIONS
+	getType : String,
+	setType(type : String) : void
+;
+
+CLASS Metricable
+ATTRIBUTES
+	noAttributes : interfaceClass
+OPERATIONS
+	getAverageMethodArgumentCount: int,
+	getMethodCount : int,
+	getAttributeCount : int,
+	getModelableArgumentCount : int,
+	getTimesUsedAsArgument : int,
+	getAssociationCount : int,
+	getLongestPathLengthToRoot : int,
+	getLongestPathLengthtoLeaf : int,
+	getDirectSubClassCount : int,
+	getSubClassCount : int,
+	getAllMetrics : List<String>,
+	getMethodArgumentCount : int
+;
+
+CLASS ErrorModelable
+ATTRIBUTES
+	noAttributes : abstractCLass
+OPERATIONS
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void.
+	setMessage(m : String) : void,
+	getMessage() : String
+;
+
+CLASS Model
+ATTRIBUTES
+	identifier : String,
+	details : String,
+	list_dec : List<Class_dec>,
+	associations : List<Association>,
+	aggregations : List<Aggregation>
+	subClassDetails : String
+OPERATIONS
+	getList_dec : List<Class_dec>,
+	setList_dec(list_dec : List<Class_dec) : void,
+	getAssociation : List<Association>,
+	setAssociation(associations : List<Association>) : void,
+	getAggregations : List<Aggregation>,
+	setAggregations(aggregations : List<Aggregations>) : void,
+	setSubClassDEtails(sc : String) : void,
+	getSubClassDetais : String,
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void 
+;
+
+CLASS Class_dec
+ATTRIBUTES
+	identifier : String,
+	details : String,
+	attributes : List<Data_Item>,
+	operations : List<Operations>,
+	subclasses : List<String>,
+	hasAssocation : boolean,
+	assoList  : List<String>
+OPERATIONS
+	getAttributes : List<Data_Item>,
+	setAttributes (attributes : List<Data_Item) : void,
+	getOperations : List<Operation>,
+	setOperations (operation : List<Operation>) : void,
+	getSubclasses : List<String>,
+	setSubclasses (subclasses : List<String>) : void,
+	hasAssociatio : boolean,
+	setAssoFlag (b : boolean) : void,
+	addAssoToList (s : String) : void,
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier (id : String) : void,
+	setDetails (details : String) : void,
+	getAverageMethodArgumentCount: int,
+	getMethodCount : int,
+	getAttributeCount : int,
+	getModelableArgumentCount : int,
+	getTimesUsedAsArgument : int,
+	getAssociationCount : int,
+	getLongestPathLengthToRoot : int,
+	getLongestPathLengthtoLeaf : int,
+	getDirectSubClassCount : int,
+	getSubClassCount : int,
+	getAllMetrics : List<String>,
+	getMethodArgumentCount : int
+;
+
+CLASS Operation
+ATTRIBUTES
+	identifier : String,
+	details : String,
+	type : String,
+	arg_list : List<Data_Item>
+OPERATIONS
+	getArg_list : List<Data_Item>,
+	setArg_list(arg_list : List<Data_Item>),
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void
+	getType : String,
+	setType (type : String) : void
+;
+
+CLASS Data_Item
+ATTRIBUTES
+	identifier : String,
+	details : String,
+	type : String,
+OPERATIONS
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void
+	getType : String,
+	setType (type : String) : void
+
+CLASS ParsingError
+ATTRIBUTES
+	message : String
+OPERATIONS
+	getMessage : String,
+	setMessage(m : String) : void
+;
+
+CLASS Role
+ATTRIBUTES
+	class_dec : String,
+	multiplicity : Multiplicity,
+OPERATIONS
+	getClass_dec : String,
+	setClass_dec (class_dec : String) : void,
+	getMultiplicity : Multiplicity,
+	setMultiplicity (m : Multiplicity) : void
+;
+
+CLASS Aggregation
+ATTRIBUTES
+	container : Role,
+	parts : role,
+	details : String
+OPERATIONS
+	getContainer : Role,
+	setContainer (container : Role) : void,
+	getParts : Role,
+	setParts (parts : Role) : void,
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void
+;
+
+CLASS Association
+ATTRIBUTES
+	role1 : Role,
+	role2 : Role,
+	identifier : String,
+	details : String
+OPERATIONS
+	getRole1 : Role,
+	setRole1 (role1 : Role) : void,
+	getRole2 : Role,
+	setRole2(role2 : Role) : void
+	getIdentifier : String,
+	getDetails : String,
+	setIdentifier(id : String) : void,
+	setDetails(details : String) : void
+;
+
+CLASS Multiplicity
+ATTRIBUTES
+	ONE : enumLiteral,
+	MANY : enumLiteral,
+	ONE_OR_MANY : enumLiteral,
+	OPTIONNALLY_ONE : enumLiteral,
+	UNDEFINED : enumLiteral
+OPERATIONS
+	noOps : enumClass
+;
+
+CLASS Parser
+ATTRIBUTES
+	_mainFile : String,
+	isFileCorrupt : boolean,
+	message : String,
+	outputModel : Model
+OPERATIONS
+	getModel(input : string) : Modelable
+	getModelID : String,
+	getClasses : List<Class_dec>,
+	checkForClassDuplicates (output : List<Class_dec , id : String) : boolean,
+	getSubclasses(id : string) : List<String>,
+	getClassAttributes (id : String) : List<Data_Item>,
+	getClassOperations (id : String) : List<Operation>,
+	getOpArgs(string : String) : List<Data_Item>,
+	getDataItem (input : String) : Data_Item,
+	getClassDetail (id : String) : String,
+	getAssociations : List<Association>,
+	setClassAssociations (assoID : String, role1 : Role, role2 : Role) : void,
+	getRole (input : String) : Role,
+	getMultiplicity(input : String) : Multiplicity,
+	getAggregations : List<Aggregation>,
+	findClassById(name : String) : Class_dec,
+	getAllClasses : List<Class_dec>
+;
+
+CLASS ParseInterface
+ATTRIBUTES
+       serialVersionUID : long,
+       containerNorth : JPanel,
+       filePathTextField : JTextField,
+       selectFile : JButton,
+       calcMetric : JButton,
+       classesPanelContainer : PanelContainer,
+       attributesPanelContainer : PanelContainer,
+       methodsPanelContainer : PanelContainer,
+       sousClassesPanelContainer : PanelContainer,
+       associationsPanelContainer : PanelContainer,
+       detailsPanelContainer : PanelContainer,
+       metricsPanelContainer : PanelContainer,
+       adapterClass_dec : DefaultListModel<String>,
+       adapterAttributes : DefaultListModel<String>,
+       adapterOperations : DefaultListModel<String>,
+       adapterSubClasses : DefaultListModel<String>,
+       adapterAggregationAssociations : DefaultListModel<String>,
+       adapterDetails : DefaultListModel<String>,
+       adapterMetrics : DefaultListModel<String>,
+       jListClass : JList<String>,
+       jListAttributes : JList<String>,
+       jListMethods : JList<String>,
+       jListSubClasses : JList<String>,
+       jListAggregations : JList<String>,
+       jListDetails : JList<String>,
+       jListMetrics : JList<String>,
+       myClasses : ArrayList<Class_dec>,
+       myAttributes : ArrayList<Data_Item>,
+       myMethods : ArrayList<Operation>,
+       mySubClass : ArrayList<String>,
+       myMetrics : ArrayList<String>,
+       mainModel : Modelable,
+       selectedClass : Class_dec,
+       allList : ArrayList<JList<String>>,
+       allModelList : ArrayList<DefaultListModel<String>>
+OPERATIONS
+       initJList : void,
+       initAllLists : void,
+       fillMetrics (c : Class_dec) : void,
+       clearAllList : void,
+       fillDetails (d : String) : void,
+       scanDetails (el : String) : void,
+       initFormating : void,
+       initStyling : void,
+       initAggAssAdapter(c : Class_dec) : void,
+       scanFile (f : File) : String,
+       chooseFile : File
+;
+
+GENERALIZATION Modelable
+	SUBCLASSES Aggregation, Association, Class_dec, Data_Item, ErrorModelable, Model, Operation
+;
+GENERALIZATION Metricable
+	SUBCLASSES Class_dec
+;
+GENERALIZATION Returnable
+	SUBCLASSES Data_Item, Operation
+;
+GENERALIZATION ErrorModelable
+	SUBCLASSES ParsingError
+;
+
+
+AGGREGATION 
+CONTAINER 
+       CLASS Model ONE
+PARTS
+       CLASS Class_dec ONE_OR_MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Model ONE
+PARTS
+       CLASS Association ONE_OR_MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Model ONE
+PARTS
+       CLASS Aggregation ONE_OR_MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Class_dec ONE
+PARTS
+       CLASS Data_Item ONE_OR_MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Class_dec ONE
+PARTS
+       CLASS Operation ONE_OR_MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Class_dec ONE
+PARTS
+       CLASS Association ONE_OR_MANY
+;
+
+
+AGGREGATION 
+CONTAINER 
+       CLASS Operation ONE
+PARTS
+       CLASS Data_Item ONE_OR_MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Role ONE
+PARTS
+       CLASS Multiplicity ONE
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Association ONE
+PARTS
+       CLASS Role MANY
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Aggregation ONE
+PARTS
+       CLASS Role MANY
+;
+
+

@@ -382,10 +382,10 @@ public class ParseInterface extends JFrame{
 	
 	private void initFormating() {
 		classesPanelContainer.add(jListClass);
-		attributesPanelContainer.add(jListAttributes);
-		methodsPanelContainer.add(jListMethods);
+		attributesPanelContainer.add(new JScrollPane(jListAttributes));
+		methodsPanelContainer.add(new JScrollPane(jListMethods));
 		sousClassesPanelContainer.add(jListSubClass);
-		associationsPanelContainer.add(jListAggregations);
+		associationsPanelContainer.add(new JScrollPane(jListAggregations));
 		detailsPanelContainer.add(new JScrollPane(jListDetails));
 		metricsPanelContainer.add(jListMetrics);
 		
