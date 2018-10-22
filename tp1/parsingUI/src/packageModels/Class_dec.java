@@ -58,7 +58,8 @@ public class Class_dec implements Modelable,Metricable {
 	}
 	public boolean hasAggregation() {
 		// TODO - implement Class_dec.hasAggregation
-		throw new UnsupportedOperationException();
+		return false;
+		//throw new UnsupportedOperationException();
 	}
 
 	public Class_dec() {
@@ -99,21 +100,30 @@ public class Class_dec implements Modelable,Metricable {
 	@Override
 	public int getAverageMethodArgumentCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		return count;
 	}
 
 	//NOM
 	@Override
 	public int getMethodCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		if(this.operations!=null) {
+				count = this.operations.size();
+		}
+		return count;
 	}
 
 	//NOA
 	@Override
 	public int getAttributeCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		if(this.attributes!=null) {
+				count = this.attributes.size();
+		}
+		return count;
 	}
 
 	//ITC
@@ -134,7 +144,15 @@ public class Class_dec implements Modelable,Metricable {
 	@Override
 	public int getAssociationCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		int countAss = 0;
+		int countAgg = 0;
+		if(this.hasAggregation()) {
+		// TODO 
+		}
+		if(this.hasAssociations) {
+			countAss = this.assoList.size();
+		}
+		return countAss+countAgg;
 	}
 
 	//DIT
@@ -155,13 +173,22 @@ public class Class_dec implements Modelable,Metricable {
 	@Override
 	public int getDirectSubClassCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		int count = 0;
+		if(this.subclasses!=null) {
+				count = this.subclasses.size();
+		}
+		return count;
 	}
 
-	//NOC
+	//NOD
 	@Override
 	public int getSubClassCount() {
 		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	public static int count(Class_dec ci) {
+		// TODO calcul recursif
 		return 0;
 	}
 
