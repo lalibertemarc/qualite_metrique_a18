@@ -1,4 +1,4 @@
-aMODEL TP1
+MODEL TP1
 CLASS Modelable
 ATTRIBUTES
 	noAttributes : interfaceClass

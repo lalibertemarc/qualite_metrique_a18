@@ -21,7 +21,10 @@ public class Parser {
 	static boolean isFileCorrupt;
 	static String message;
 	static Model outputModel;
-
+	/*TODO
+	 * redo regex for no attributes
+	 * 
+	 * */
 	
 	public static Modelable getModel(String input)
 	{
@@ -195,7 +198,7 @@ public class Parser {
 		Pattern classAttributes = Pattern.compile(regex);
 		Matcher matcher = classAttributes.matcher(_mainFile);
 		
-		if(matcher.find())
+		while(matcher.find())
 		{
 			String[] datAr = matcher.group(1).split("\n");
 			for(int i=0;i<datAr.length;i++)
@@ -214,7 +217,7 @@ public class Parser {
 		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS\\n((.+\\n)+)";
 		Pattern classOperations = Pattern.compile(regex);
 		Matcher matcher = classOperations.matcher(_mainFile);
-		if(matcher.find())
+		while(matcher.find())
 		{
 			String[] opAr = matcher.group(3).split("\n");
 			for(int i=0;i<opAr.length;i++)
