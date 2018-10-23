@@ -252,10 +252,42 @@ public class ParseInterface extends JFrame{
 				if(element.contains("(A)"))
 				{
 					adapterDetails.clear();
-					//TODO find corresponding aggregation, not hardcoded first one
+					// elementToScan[1] will be Class_dec Id to find.
 					String[] elementToScan = element.split(" _ ");
+					String classIDtoFind = elementToScan[1];
 					
-					fillDetails(((Model)mainModel).getAggregations().get(0).getDetails());
+					// aggId is the Container||Parts of the aggregation
+					String aggId = elementToScan[0].split(" ")[1];
+					
+					int aggregationIndex = 0;
+					//find corresponding aggregation in model
+					for(int j=0;j<((Model)mainModel).getAggregations().size();j++)
+					{
+						if(aggId.equals("C") && ((Model)mainModel).getAggregations().get(j).getContainer().getClass_dec().equals(classIDtoFind))
+						{
+							aggregationIndex = j;
+							break;
+						}
+						if(aggId.equals("P") && ((Model)mainModel).getAggregations().get(j).getParts().getClass_dec().equals(classIDtoFind))
+						{
+							aggregationIndex = j;
+							break;
+						}
+					}
+					/*
+					 * I admit, this part is totally convoluted and ugly
+					 * In the best case scenario, we should have put aggregations in class_dec attributes like get/set Aggregation
+					 * and put a find corresponding agg method there.
+					 * 
+					 * we thought it was simpler to put the aggregation list in model because the aggregation has 2
+					 * class_dec identifier. so it was to prevent duplicates, kind of a 1st normal form of a relational DB... i guess...
+					 * 
+					 * so I guess it was either the parser or the UI part that was bound to be convoluted
+					 * 
+					 * Marc
+					 * */
+					
+					fillDetails(((Model)mainModel).getAggregations().get(aggregationIndex).getDetails());
 					scanDetails(elementToScan[1]);
 				}
 				
