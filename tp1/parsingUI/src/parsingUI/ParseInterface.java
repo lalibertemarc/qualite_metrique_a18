@@ -106,6 +106,7 @@ public class ParseInterface extends JFrame{
 			
 				Modelable model = Parser.getModel(toParse);
 				
+				
 				if(model instanceof ParsingError) 
 				{
 					new JOptionPane();
@@ -115,6 +116,9 @@ public class ParseInterface extends JFrame{
 				else 
 				{
 					mainModel = model;
+					((Model)mainModel).setSubClasses();
+					((Model)mainModel).getAllClassesTypes();
+					((Model)mainModel).setOtherOperations();
 					//load all classes by default
 					myClasses = (ArrayList<Class_dec>) ((Model)model).getList_dec();
 					adatperClassDec.clear();

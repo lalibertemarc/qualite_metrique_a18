@@ -12,6 +12,7 @@ CLASS Participant
 ATTRIBUTES 
 nom : String
 OPERATIONS 
+	  change_statut (st : String) : void
 ;
 
 CLASS Joueur
@@ -20,7 +21,7 @@ ATTRIBUTES
       statut : String
 OPERATIONS 
       nombre_saisons() : Integer,
-      change_statut (st : String) : void
+	  change_statut (st : String) : void
 ;
 
 CLASS Entraineur

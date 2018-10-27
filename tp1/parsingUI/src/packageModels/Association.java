@@ -1,6 +1,6 @@
 package packageModels;
 public class Association implements Modelable {
-
+	
 	private Role role1;
 	private Role role2;
 	private String identifier;

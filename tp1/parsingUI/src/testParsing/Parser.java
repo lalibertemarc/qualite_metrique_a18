@@ -21,6 +21,7 @@ public class Parser {
 	static boolean isFileCorrupt;
 	static String message;
 	static Model outputModel;
+	
 	/*TODO
 	 * redo regex for no attributes
 	 * 
@@ -66,7 +67,6 @@ public class Parser {
 			isFileCorrupt=false;
 			return new ParsingError(message);		
 		}
-		
 		return outputModel;
 	}
 
@@ -134,7 +134,6 @@ public class Parser {
 			newClass.setSubclasses(getSubclasses(id));
 			
 			output.add(newClass);
-          
         }
 		
 		//no classes
@@ -178,12 +177,17 @@ public class Parser {
 			outputModel.setSubClassDetails("<html>"+matcher.group().replaceAll("\n","<br>")+"</html>");
 			
 			String[] classes = matcher.group(2).split(", ");
-			for(int i = 0 ;i<classes.length;i++)
-			{
-				//TODO
-				//check if classes are declared in file
-				output.add(classes[i]);
-			}
+			if (classes.length>0) {
+				for(int i = 0 ;i<classes.length;i++)
+				{
+					//TODO
+					//check if classes are declared in file
+					
+					
+					output.add(classes[i]);
+					
+				}
+			}	
 		}
 		
 		if(output.size()==0)
@@ -191,7 +195,7 @@ public class Parser {
 		return output;
 	}
 
-
+	
 	private static List<Data_Item> getClassAttributes(String id) {
 		List<Data_Item> output = new ArrayList<Data_Item>();
 		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS";
@@ -426,16 +430,42 @@ public class Parser {
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
 			aggregation.setDetails(matcher.group());
+			setClassAggregations(container, parts);
 			output.add(aggregation);
 		}
 		
 		return output;
 	}
 	
+	private static void setClassAggregations(Role container, Role parts) {
+		
+		String name1 = container.getClass_dec();
+		String name2 = parts.getClass_dec();
+		
+		for(int i=0;i<outputModel.getList_dec().size();i++)
+		{
+			if(outputModel.getList_dec().get(i).getIdentifier().equals(name1))
+			{
+				outputModel.getList_dec().get(i).setAggrFlag(true);
+				outputModel.getList_dec().get(i).addAssoToList("(A) "+ parts);
+				//outputModel.getList_dec().get(i).addAssoToList("(R) "+classId+ " "+assoId + role2.getMultiplicity() + " " + name2);
+			}
+			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
+			{
+				outputModel.getList_dec().get(i).setAggrFlag(true);
+				outputModel.getList_dec().get(i).addAggrToList("(A) "+ container);
+				//outputModel.getList_dec().get(i).addAssoToList("(R) "+name1+ " "+assoId + role1.getMultiplicity() + " " + classId);
+			}
+		}
+		
+	}
+	
+
+
 	//helper classes
 	public static Class_dec findClassById(String name)
 	{
-		for(int i=0;i<outputModel.getList_dec().size() ;i++)
+		for(int i=0 ; i<outputModel.getList_dec().size() ;i++)
 		{
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name))
 			{
@@ -448,6 +478,5 @@ public class Parser {
 	public static List<Class_dec> getAllClasses()
 	{
 		return outputModel.getList_dec();
-	}
-	
+	}			
 }

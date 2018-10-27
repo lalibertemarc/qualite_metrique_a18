@@ -5,7 +5,7 @@ import java.util.*;
 public interface Metricable {
 	
 	//ANA
-	int getAverageMethodArgumentCount();
+	float getAverageMethodArgumentCount();
 		
 	//NOM
 	int getMethodCount();

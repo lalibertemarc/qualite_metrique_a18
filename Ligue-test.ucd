@@ -12,6 +12,7 @@ CLASS Participant
 ATTRIBUTES 
 nom : String
 OPERATIONS 
+      nombre_saisons() : Integer,
 ;
 
 CLASS Joueur
@@ -27,6 +28,7 @@ CLASS Entraineur
 ATTRIBUTES 
       degre : Integer
 OPERATIONS 
+      nombre_saisons() : Integer, 
 ;
 
 CLASS Stade 
