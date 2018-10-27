@@ -424,41 +424,17 @@ public class Parser {
 		while(matcher.find())
 		{
 			Aggregation aggregation = new Aggregation();
-			Role container = getRole(matcher.group(3));
-			Role parts = getRole(matcher.group(5));
-			
+						
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
 			aggregation.setDetails(matcher.group());
-			setClassAggregations(container, parts);
+			
 			output.add(aggregation);
 		}
 		
 		return output;
 	}
 	
-	private static void setClassAggregations(Role container, Role parts) {
-		
-		String name1 = container.getClass_dec();
-		String name2 = parts.getClass_dec();
-		
-		for(int i=0;i<outputModel.getList_dec().size();i++)
-		{
-			if(outputModel.getList_dec().get(i).getIdentifier().equals(name1))
-			{
-				outputModel.getList_dec().get(i).setAggrFlag(true);
-				outputModel.getList_dec().get(i).addAssoToList("(A) "+ parts);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+classId+ " "+assoId + role2.getMultiplicity() + " " + name2);
-			}
-			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
-			{
-				outputModel.getList_dec().get(i).setAggrFlag(true);
-				outputModel.getList_dec().get(i).addAggrToList("(A) "+ container);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+name1+ " "+assoId + role1.getMultiplicity() + " " + classId);
-			}
-		}
-		
-	}
 	
 
 

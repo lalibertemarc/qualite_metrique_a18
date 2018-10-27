@@ -23,6 +23,7 @@ public class Class_dec implements Modelable,Metricable {
 	private List<String> aggrList = new ArrayList<String>();
 	private Class_dec superClasse;
 	private List<Operation> operationOthersClasses;
+	private int numberOfSubClass;
 
 	public List<Data_Item> getAttributes() {
 		return this.attributes;
@@ -70,9 +71,9 @@ public class Class_dec implements Modelable,Metricable {
 		hasAggregations=b;
 	}
 
-	public void addAggrToList(String s)
+	public void setAggrList(List<String> s)
 	{
-		aggrList.add(s);
+		this.aggrList = s;
 	}
 	
 	public List<String> getAggrList()
@@ -323,19 +324,31 @@ public class Class_dec implements Modelable,Metricable {
 		return count;
 	}
 
-	//CAC
+	//CAC 6
 	@Override
 	public int getAssociationCount() {
 		// TODO Auto-generated method stub
-		int countAss = 0;
-		int countAgg = 0;
-		if(this.hasAggregation()) {
-		// TODO 
+		int count = 0;
+		int countAsso = 0;
+		int countAggr = 0;
+		if(this.isSubClass) 
+		{
+			List<String> g = getInheritedGeneralizations(this);
+			List<String> loc = getLocalGeneralizations(this);
+			count = g.size()+loc.size();
 		}
-		if(this.hasAssociations) {
-			countAss = this.assoList.size();
+		else 
+		{
+			if(this.hasAggregations)	
+			{
+				countAggr = this.getAggrList().size();
+			}
+			if(this.hasAssociations) {
+				countAsso = this.getAssoList().size();
+			}
+			count =countAsso+countAggr;
 		}
-		return countAss+countAgg;
+		return count;
 	}
 
 	//DIT
@@ -366,26 +379,28 @@ public class Class_dec implements Modelable,Metricable {
 	@Override
 	public int getSubClassCount() {
 		// TODO Auto-generated method stub
-		int count =0;
+		int count = 0;
 		if(this.isSuperClass) {
-			for (int i=0; i<this.subClass.size(); i++) {
-				if(this.subClass.get(i).isSuperClass) {
-					
-				}
-			}
+			count=this.subclasses.size() + numberSubClasses(this);
 		}	
-		return 0;
+		return count;
 	}
-	static int countSubClass =0;
+	
+
 	public static int numberSubClasses(Class_dec c) {
+		int count=0;
+		if (!c.isSuperClass) {
+			count=0;
+		}
 		if (c.isSuperClass) {
 			for(int i=0; i<c.subClass.size();i++) {
 				if(c.subClass.get(i).isSuperClass) {
-					countSubClass+=numberSubClasses(c.subClass.get(i));
+					count+=numberSubClasses(c.subClass.get(i));
+					System.out.println(count);
 				}
 			}
 		}
-		return countSubClass;
+		return count;
 	}
 	
 	
@@ -533,6 +548,86 @@ public class Class_dec implements Modelable,Metricable {
 		return op;
 	}
 	
+	public static List<String> getLocalGeneralizations(Class_dec c){
+		List<String> g = getInheritedGeneralizations(c);
+		List<String> loc = new ArrayList<String>();
+		loc.addAll(c.getAssoList());
+		loc.addAll(c.getAggrList());
+		
+		for(int i=0; i<loc.size(); i++) {
+			for (int j=0; j<g.size(); j++) {
+				if(loc.get(i).equals(g.get(j))) {
+					loc.remove(i);
+				}
+			}
+		}
+		return loc;
+	}
 	
+	public static List<String> getInheritedGeneralizations(Class_dec c){
+		List<String> g = new ArrayList<String>();
+		boolean equalFlag = true;
+		boolean subClass1 = true;
+		while(c.isSubClass()){
+			if(subClass1){
+				subClass1 =false;
+			}
+			else {
+				if(c.getAggrList()!=null){
+					for(int i=0; i<c.getAggrList().size(); i++) {
+						for (int j=0; j<g.size(); j++) {
+							if(g.get(j).equals(c.getAggrList().get(i))) {
+								equalFlag=false;
+							}
+						}
+						if(equalFlag) {
+							g.add(c.getAggrList().get(i));
+						}
+					}
+				}
+				if(c.getAssoList()!=null){
+					for(int i=0; i<c.getAssoList().size(); i++) {
+						for (int j=0; j<g.size(); j++) {
+							if(g.get(j).equals(c.getAssoList().get(i))) {
+								equalFlag=false;
+							}
+						}
+						if(equalFlag) {
+							g.add(c.getAssoList().get(i));
+						}
+					}
+				}
+			}
+			
+			c = c.getSuperclasse();
+			if(!c.isSubClass) {
+				if(c.getAggrList()!=null){
+					for(int i=0; i<c.getAggrList().size(); i++) {
+						for (int j=0; j<g.size(); j++) {
+							if(g.get(j).equals(c.getAggrList().get(i))) {
+								equalFlag=false;
+							}
+						}
+						if(equalFlag) {
+							g.add(c.getAggrList().get(i));
+						}
+					}
+				}
+				if(c.getAssoList()!=null){
+					for(int i=0; i<c.getAssoList().size(); i++) {
+						for (int j=0; j<g.size(); j++) {
+							if(g.get(j).equals(c.getAssoList().get(i))) {
+								equalFlag=false;
+							}
+						}
+						if(equalFlag) {
+							g.add(c.getAssoList().get(i));
+						}
+					}
+				}
+			}
+		}
+		return g;
+	}
 	
 }

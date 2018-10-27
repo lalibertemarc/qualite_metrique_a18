@@ -82,6 +82,27 @@ public class Model implements Modelable {
 		this.details=details;
 		
 	}
+	
+	public void getSubClass() {
+		List<String> subclasses=new ArrayList<String>();
+		List<Class_dec> sc = new ArrayList<Class_dec>();
+		for(int i=0 ; i<this.list_dec.size() ;i++)
+		{
+			if(this.list_dec.get(i).getSubclasses()!=null)
+			{	
+				subclasses = this.list_dec.get(i).getSubclasses();
+			}
+			for(int j=0; j<subclasses.size(); j++) {
+				for(int k=0; k<this.list_dec.size(); k++) {
+					if(subclasses.get(j).equals(this.list_dec.get(k).getIdentifier())) {
+						sc.add(this.list_dec.get(k));
+					}
+				}
+			}
+			this.list_dec.get(i).setSubClass(sc);
+		}	
+	}
+	
 	public void setSubClasses(){
 		for(int i=0 ; i<this.list_dec.size() ;i++)
 		{
@@ -103,7 +124,6 @@ public class Model implements Modelable {
 				}
 			}
 		}
-		
 	}
 	
 	public void getAllClassesTypes() {
@@ -132,8 +152,25 @@ public class Model implements Modelable {
 			oP.addAll(op);
 			oP.remove(this.list_dec.get(i).getOperations());
 			this.list_dec.get(i).setOtherOperations(oP);
+		}	
+	}
+	
+	public void setAggregations(){
+		boolean condition1 = false;
+		boolean condition2 = false;
+		for(int i=0; i< this.list_dec.size(); i++) {
+			List<String> agg = new ArrayList<String>();
+			for (int j =0; j<this.aggregations.size(); j++) {
+				condition1 =this.list_dec.get(i).getIdentifier().
+						equals(this.aggregations.get(j).getContainer().getClass_dec());
+				condition2 =this.list_dec.get(i).getIdentifier().
+						equals(this.aggregations.get(j).getParts().getClass_dec()) ;
+				if(condition1||condition2) {
+					agg.add(this.aggregations.get(j).getIdentifier());
+				}
+			}
+			this.list_dec.get(i).setAggrList(agg);
 		}
-		
 	}
 	
 }
