@@ -90,7 +90,7 @@ public class Parser {
 		if(id.equals(""))
 		{
 			isFileCorrupt = true;
-			message="empty model name";
+			message="Empty model name";
 			return null;
 			
 		}
@@ -160,13 +160,13 @@ public class Parser {
 
 	private static List<String> getSubclasses(String id) {
 		List<String> output = new ArrayList<String>();
-		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES (.*)\\n;";
+		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES(.*)\\n;";
 		Pattern subClassesPatt = Pattern.compile(regex);
 		Matcher matcher = subClassesPatt.matcher(_mainFile);
 		
 		while(matcher.find())
 		{
-			if(matcher.group(2).equals(""))
+			if(matcher.group(2).equals("") || matcher.group(2).equals(" ") || matcher.group(2).equals(" \n"))
 			{
 				isFileCorrupt = true;
 				message="Malformed subclasses name, subclasses name cannot be empty.";
@@ -243,7 +243,7 @@ public class Parser {
 					type = opMatcher.group(2).replace(",", "");
 				}
 				
-				if(name.equals("") || type.equals(""))
+				if(name.equals("") || type.equals("") || name.equals(" ") || type.equals(" "))
 				{
 					isFileCorrupt = true;
 					message="Malformed operation declaration, name or type cannot be empty";
@@ -350,13 +350,11 @@ public class Parser {
 			{
 				outputModel.getList_dec().get(i).setAssoFlag(true);
 				outputModel.getList_dec().get(i).addAssoToList("(R) "+ assoId);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+classId+ " "+assoId + role2.getMultiplicity() + " " + name2);
 			}
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
 			{
 				outputModel.getList_dec().get(i).setAssoFlag(true);
 				outputModel.getList_dec().get(i).addAssoToList("(R) "+ assoId);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+name1+ " "+assoId + role1.getMultiplicity() + " " + classId);
 			}
 		}
 		
