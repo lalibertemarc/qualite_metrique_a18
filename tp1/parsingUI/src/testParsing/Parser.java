@@ -67,8 +67,11 @@ public class Parser {
 			isFileCorrupt=false;
 			return new ParsingError(message);		
 		}
+		
 		return outputModel;
 	}
+
+
 
 
 	private static String getModelId() {
@@ -180,12 +183,7 @@ public class Parser {
 			if (classes.length>0) {
 				for(int i = 0 ;i<classes.length;i++)
 				{
-					//TODO
-					//check if classes are declared in file
-					
-					
 					output.add(classes[i]);
-					
 				}
 			}	
 		}
@@ -327,9 +325,22 @@ public class Parser {
 			String assoId = matcher.group(1).replaceAll(" ", "");
 			newAsso.setIdentifier(assoId);
 			Role role1 = getRole(matcher.group(3));
-			newAsso.setRole1(role1);
 			Role role2 = getRole(matcher.group(4));
+			newAsso.setRole1(role1);			
 			newAsso.setRole2(role2);
+			
+			if(role1 == null || role2 == null)
+			{
+				isFileCorrupt = true;
+				message="Malformed role declaration";
+				return null;	
+			}
+			if(role1.getMultiplicity() == null || role2.getMultiplicity() == null)
+			{
+				isFileCorrupt = true;
+				message="Mutliplicity does not exists";
+				return null;
+			}
 			setClassAssociations(assoId, role1, role2);
 			newAsso.setDetails(matcher.group());
 			output.add(newAsso);
@@ -381,13 +392,6 @@ public class Parser {
 			role.setClass_dec(classdec);
 			
 			Multiplicity mul = getMultiplicity(matcher.group(2).replaceAll(",",""));
-			if(mul==null)
-			{
-				isFileCorrupt = true;
-				message="Mutliplicity does not exists";
-				return null;
-				
-			}
 			role.setMultiplicity(mul);
 		}
 		return role;
@@ -446,13 +450,11 @@ public class Parser {
 			{
 				outputModel.getList_dec().get(i).setAggrFlag(true);
 				outputModel.getList_dec().get(i).addAssoToList("(A) "+ parts);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+classId+ " "+assoId + role2.getMultiplicity() + " " + name2);
 			}
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
 			{
 				outputModel.getList_dec().get(i).setAggrFlag(true);
 				outputModel.getList_dec().get(i).addAggrToList("(A) "+ container);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+name1+ " "+assoId + role1.getMultiplicity() + " " + classId);
 			}
 		}
 		

@@ -191,6 +191,38 @@ private String path = "testFiles/";
 	}
 	
 	@Test
+	public void notExistingMultiplicity() throws IOException
+	{
+		//Arrange
+		File file = new File(path+"notExistingMult.ucd");
+		String input = ParseInterface.scanFile(file);
+		String message="Mutliplicity does not exists";
+		
+		//Act
+		Modelable model = Parser.getModel(input);
+		
+		//Assert
+		assertTrue(model instanceof ParsingError);
+		assertEquals(((ParsingError)model).getMessage(),message);
+	}
+	
+	@Test
+	public void malformedRole() throws IOException
+	{
+		//Arrange
+		File file = new File(path+"malformedRole.ucd");
+		String input = ParseInterface.scanFile(file);
+		String message="Malformed role declaration";
+		
+		//Act
+		Modelable model = Parser.getModel(input);
+		
+		//Assert
+		assertTrue(model instanceof ParsingError);
+		assertEquals(((ParsingError)model).getMessage(),message);
+	}
+	
+	@Test
 	public void goodModelParsing() throws IOException
 	{
 		//Arrange
