@@ -67,8 +67,11 @@ public class Parser {
 			isFileCorrupt=false;
 			return new ParsingError(message);		
 		}
+		
 		return outputModel;
 	}
+
+
 
 
 	private static String getModelId() {
@@ -90,7 +93,7 @@ public class Parser {
 		if(id.equals(""))
 		{
 			isFileCorrupt = true;
-			message="empty model name";
+			message="Empty model name";
 			return null;
 			
 		}
@@ -160,13 +163,13 @@ public class Parser {
 
 	private static List<String> getSubclasses(String id) {
 		List<String> output = new ArrayList<String>();
-		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES (.*)\\n;";
+		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES(.*)\\n;";
 		Pattern subClassesPatt = Pattern.compile(regex);
 		Matcher matcher = subClassesPatt.matcher(_mainFile);
 		
 		while(matcher.find())
 		{
-			if(matcher.group(2).equals(""))
+			if(matcher.group(2).equals("") || matcher.group(2).equals(" ") || matcher.group(2).equals(" \n"))
 			{
 				isFileCorrupt = true;
 				message="Malformed subclasses name, subclasses name cannot be empty.";
@@ -180,12 +183,7 @@ public class Parser {
 			if (classes.length>0) {
 				for(int i = 0 ;i<classes.length;i++)
 				{
-					//TODO
-					//check if classes are declared in file
-					
-					
 					output.add(classes[i]);
-					
 				}
 			}	
 		}
@@ -243,7 +241,7 @@ public class Parser {
 					type = opMatcher.group(2).replace(",", "");
 				}
 				
-				if(name.equals("") || type.equals(""))
+				if(name.equals("") || type.equals("") || name.equals(" ") || type.equals(" "))
 				{
 					isFileCorrupt = true;
 					message="Malformed operation declaration, name or type cannot be empty";
@@ -327,9 +325,22 @@ public class Parser {
 			String assoId = matcher.group(1).replaceAll(" ", "");
 			newAsso.setIdentifier(assoId);
 			Role role1 = getRole(matcher.group(3));
-			newAsso.setRole1(role1);
 			Role role2 = getRole(matcher.group(4));
+			newAsso.setRole1(role1);			
 			newAsso.setRole2(role2);
+			
+			if(role1 == null || role2 == null)
+			{
+				isFileCorrupt = true;
+				message="Malformed role declaration";
+				return null;	
+			}
+			if(role1.getMultiplicity() == null || role2.getMultiplicity() == null)
+			{
+				isFileCorrupt = true;
+				message="Mutliplicity does not exists";
+				return null;
+			}
 			setClassAssociations(assoId, role1, role2);
 			newAsso.setDetails(matcher.group());
 			output.add(newAsso);
@@ -350,13 +361,11 @@ public class Parser {
 			{
 				outputModel.getList_dec().get(i).setAssoFlag(true);
 				outputModel.getList_dec().get(i).addAssoToList("(R) "+ assoId);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+classId+ " "+assoId + role2.getMultiplicity() + " " + name2);
 			}
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name2))
 			{
 				outputModel.getList_dec().get(i).setAssoFlag(true);
 				outputModel.getList_dec().get(i).addAssoToList("(R) "+ assoId);
-				//outputModel.getList_dec().get(i).addAssoToList("(R) "+name1+ " "+assoId + role1.getMultiplicity() + " " + classId);
 			}
 		}
 		
@@ -383,13 +392,6 @@ public class Parser {
 			role.setClass_dec(classdec);
 			
 			Multiplicity mul = getMultiplicity(matcher.group(2).replaceAll(",",""));
-			if(mul==null)
-			{
-				isFileCorrupt = true;
-				message="Mutliplicity does not exists";
-				return null;
-				
-			}
 			role.setMultiplicity(mul);
 		}
 		return role;
@@ -424,17 +426,14 @@ public class Parser {
 		while(matcher.find())
 		{
 			Aggregation aggregation = new Aggregation();
-						
 			aggregation.setContainer(getRole(matcher.group(3)));
 			aggregation.setParts(getRole(matcher.group(5)));
 			aggregation.setDetails(matcher.group());
-			
 			output.add(aggregation);
 		}
 		
 		return output;
 	}
-	
 	
 
 

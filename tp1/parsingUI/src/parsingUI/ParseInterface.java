@@ -286,7 +286,7 @@ public class ParseInterface extends JFrame{
 					 * and put a find corresponding agg method there.
 					 * 
 					 * we thought it was simpler to put the aggregation list in model because the aggregation has 2
-					 * class_dec identifier. so it was to prevent duplicates, kind of a 1st normal form of a relational DB... i guess...
+					 * class_dec identifier. so it was to prevent duplicates,
 					 * 
 					 * so I guess it was either the parser or the UI part that was bound to be convoluted
 					 * 
@@ -504,7 +504,7 @@ public class ParseInterface extends JFrame{
 	}
 	
 	
-	public String scanFile(File f) throws IOException
+	public static String scanFile(File f) throws IOException
 	{
 		  BufferedReader br = new BufferedReader(new FileReader(f)); 
 		  String inputFile = "";
