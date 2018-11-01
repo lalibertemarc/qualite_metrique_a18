@@ -1,10 +1,7 @@
 package packageModels;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import testParsing.Parser;
 
 public class Class_dec implements Modelable,Metricable {
 
@@ -23,7 +20,6 @@ public class Class_dec implements Modelable,Metricable {
 	private List<String> aggrList = new ArrayList<String>();
 	private Class_dec superClasse;
 	private List<Operation> operationOthersClasses;
-	private int numberOfSubClass;
 
 	public List<Data_Item> getAttributes() {
 		return this.attributes;
@@ -351,21 +347,21 @@ public class Class_dec implements Modelable,Metricable {
 		return count;
 	}
 
-	//DIT
+	//DIT 7
 	@Override
 	public int getLongestPathLengthToRoot() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	//CLD
+	//CLD 8
 	@Override
 	public int getLongestPathLengthtoLeaf() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	//NOC
+	//NOC 9
 	@Override
 	public int getDirectSubClassCount() {
 		int count = 0;
@@ -380,9 +376,9 @@ public class Class_dec implements Modelable,Metricable {
 	public int getSubClassCount() {
 		// TODO Auto-generated method stub
 		int count = 0;
-		if(this.isSuperClass) {
-			count=this.subclasses.size() + numberSubClasses(this);
-		}	
+		//if(this.isSuperClass) {
+			//count=numberSubClasses(this);
+		//}	
 		return count;
 	}
 	
@@ -392,13 +388,21 @@ public class Class_dec implements Modelable,Metricable {
 		if (!c.isSuperClass) {
 			count=0;
 		}
-		if (c.isSuperClass) {
-			for(int i=0; i<c.subClass.size();i++) {
-				if(c.subClass.get(i).isSuperClass) {
-					count+=numberSubClasses(c.subClass.get(i));
-					System.out.println(count);
+		else {
+			if(c.subClass.size()==1) {
+				count = c.subClass.size();
+				c =null;
+			}
+			else {
+				for(int i=0; i<c.subClass.size();i++) {
+					if(c.subClass.get(i).isSuperClass) {
+						count+=numberSubClasses(c.subClass.get(i));
+						System.out.println(count);
+					}
 				}
 			}
+			
+			//count+=c.subClass.size();
 		}
 		return count;
 	}
@@ -628,6 +632,5 @@ public class Class_dec implements Modelable,Metricable {
 			}
 		}
 		return g;
-	}
-	
+	}	
 }

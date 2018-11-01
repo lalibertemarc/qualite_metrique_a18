@@ -120,6 +120,7 @@ public class ParseInterface extends JFrame{
 					((Model)mainModel).getAllClassesTypes();
 					((Model)mainModel).setOtherOperations();
 					((Model)mainModel).getSubClass();
+					((Model)mainModel).setAggregations();
 					//load all classes by default
 					myClasses = (ArrayList<Class_dec>) ((Model)model).getList_dec();
 					adatperClassDec.clear();

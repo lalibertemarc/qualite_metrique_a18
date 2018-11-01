@@ -169,7 +169,13 @@ public class Model implements Modelable {
 					agg.add(this.aggregations.get(j).getIdentifier());
 				}
 			}
-			this.list_dec.get(i).setAggrList(agg);
+			if(agg.size()>0) {
+				this.list_dec.get(i).setAggrList(agg);
+				this.list_dec.get(i).setAggrFlag(true);
+			}
+			
+	
+			
 		}
 	}
 	
