@@ -13,7 +13,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import testParsing.Parser;
+
 import packageModels.Aggregation;
 import packageModels.Association;
 import packageModels.Class_dec;
@@ -22,53 +22,124 @@ import packageModels.Model;
 import packageModels.Modelable;
 import packageModels.Operation;
 import packageModels.ParsingError;
+import testParsing.Parser;
 
-
+/**
+ * The Class ParseInterface.
+ * Main Swing UI for the project.
+ */
 public class ParseInterface extends JFrame{
 	
+	/** The Constant serialVersionUID. */
 	static final long serialVersionUID = 1L;
+	
+	/** The container north. */
 	private JPanel containerNorth = new JPanel();
+	
+	/** The file path text field. */
 	private JTextField filePathTextField = new JTextField();
+	
+	/** The select file. */
 	private JButton selectFile = new JButton("Load File");
+	
+	/** The calc metric. */
 	private JButton calcMetric = new JButton("Calculate Metrics");
 	
+	/** The classes panel container. */
 	private PanelContainer classesPanelContainer = new PanelContainer("Classes");
+	
+	/** The attributes panel container. */
 	private PanelContainer attributesPanelContainer = new PanelContainer("Attributs");
+	
+	/** The methods panel container. */
 	private PanelContainer methodsPanelContainer = new PanelContainer("Methodes");
+	
+	/** The sous classes panel container. */
 	private PanelContainer sousClassesPanelContainer = new PanelContainer("Sub Classes");
+	
+	/** The associations panel container. */
 	private PanelContainer associationsPanelContainer = new PanelContainer("Associations/Relations");
+	
+	/** The details panel container. */
 	private PanelContainer detailsPanelContainer = new PanelContainer("Details");
+	
+	/** The metrics panel container. */
 	private PanelContainer metricsPanelContainer = new PanelContainer("Metrics");
 	
 	
+	/** The adatper for class dec. */
 	private DefaultListModel<String> adatperClassDec;
+	
+	/** The adapter for attributes. */
 	private DefaultListModel<String> adapterAttributes ;
+	
+	/** The adapter for operations. */
 	private DefaultListModel<String> adapterOperations ;
+	
+	/** The adapter for sub classes. */
 	private DefaultListModel<String> adapterSubClasses;
+	
+	/** The adapter for aggregetions//associations. */
 	private DefaultListModel<String> adapterAggregetionsAssociations ;
+	
+	/** The adapter for details. */
 	private DefaultListModel<String> adapterDetails ;
+	
+	/** The adapter for metrics. */
 	private DefaultListModel<String> adapterMetrics ;
 	
 	
+	/** The j list class. */
 	JList<String> jListClass ;
+	
+	/** The j list attributes. */
 	JList<String> jListAttributes;
+	
+	/** The j list methods. */
 	JList<String> jListMethods;
+	
+	/** The j list sub class. */
 	JList<String> jListSubClass;
+	
+	/** The j list aggregations. */
 	JList<String> jListAggregations;
+	
+	/** The j list details. */
 	JList<String> jListDetails;
+	
+	/** The j list metrics. */
 	JList<String> jListMetrics;
 	
+	/** The my classes. */
 	private ArrayList<Class_dec> myClasses;
+	
+	/** The my attributes. */
 	private ArrayList<Data_Item> myAttributes;
+	
+	/** The my methods. */
 	private ArrayList<Operation> myMethods;
+	
+	/** The my sub class. */
 	private ArrayList<String> mySubClass;
+	
+	/** The my metrics. */
 	private ArrayList<String> myMetrics;
+	
+	/** The main model. */
 	Modelable mainModel;
+	
+	/** The selected class. */
 	Class_dec selectedClass;
 	
+	/** The all list. */
 	ArrayList<JList<String>> allList = new ArrayList<JList<String>>();
+	
+	/** The all model list. */
 	ArrayList<DefaultListModel<String>> allModelList = new ArrayList<DefaultListModel<String>>();
 
+	/**
+	 * Instantiates a new Parser Interface.
+	 */
 	public ParseInterface(){	
 
 		//basic appearance 
@@ -116,10 +187,10 @@ public class ParseInterface extends JFrame{
 				else 
 				{
 					mainModel = model;
-					((Model)mainModel).setSubClasses();
-					((Model)mainModel).getAllClassesTypes();
+					((Model)mainModel).setSubClassesFlags();
+					((Model)mainModel).setAllClassesTypes();
 					((Model)mainModel).setOtherOperations();
-					((Model)mainModel).getSubClass();
+					((Model)mainModel).SetAllSubClasses();
 					((Model)mainModel).setAggregations();
 					//load all classes by default
 					myClasses = (ArrayList<Class_dec>) ((Model)model).getList_dec();
@@ -339,6 +410,9 @@ public class ParseInterface extends JFrame{
 		this.setVisible(true);		
 	}
 
+	/**
+	 * Inits the J lists.
+	 */
 	private void initJList() {
 		adatperClassDec = new DefaultListModel<String>();
 		adapterAttributes = new DefaultListModel<String>();
@@ -357,6 +431,9 @@ public class ParseInterface extends JFrame{
 		jListMetrics = new JList<>(adapterMetrics);
 	}
 
+	/**
+	 * Inits the all lists.
+	 */
 	private void initAllLists() {
 		allList.add(jListClass);
 		allList.add(jListAttributes);
@@ -373,6 +450,11 @@ public class ParseInterface extends JFrame{
 		allModelList.add(adapterSubClasses);
 	}
 
+	/**
+	 * Fill metrics.
+	 *
+	 * @param selectedClass the selected class
+	 */
 	private void fillMetrics(Class_dec selectedClass) 
 	{
 		adapterMetrics.clear();
@@ -384,6 +466,9 @@ public class ParseInterface extends JFrame{
 		
 	}
 	
+	/**
+	 * Clear all lists.
+	 */
 	private void clearAllList()
 	{
 		for(int i =0 ;i<allList.size();i++)
@@ -397,6 +482,11 @@ public class ParseInterface extends JFrame{
 			
 	}
 	
+	/**
+	 * Fill details.
+	 *
+	 * @param d the d
+	 */
 	private void fillDetails(String d)
 	{
 		String[] details = d.split("\n");
@@ -406,6 +496,12 @@ public class ParseInterface extends JFrame{
 			adapterDetails.addElement(details[i]);
 		}
 	}
+	
+	/**
+	 * Scan details to set selected index at the correct line in details container.
+	 *
+	 * @param el the el
+	 */
 	private void scanDetails(String el)
 	{
 		for(int i= 0;i<adapterDetails.size();i++)
@@ -418,6 +514,9 @@ public class ParseInterface extends JFrame{
 		}
 	}
 	
+	/**
+	 * Inits the formating.
+	 */
 	private void initFormating() {
 		classesPanelContainer.add(jListClass);
 		attributesPanelContainer.add(new JScrollPane(jListAttributes));
@@ -437,6 +536,9 @@ public class ParseInterface extends JFrame{
 		
 	}
 
+	/**
+	 * Inits the styling.
+	 */
 	private void initStyling() {
 		
 		// Set list styling
@@ -473,6 +575,11 @@ public class ParseInterface extends JFrame{
 		containerNorth.setBounds(0, 0, 1030, 100);
 	}
 
+	/**
+	 * Inits the aggegation// association adapter.
+	 *
+	 * @param c the c
+	 */
 	private void initAggAssAdapter(Class_dec c) {
 		
 		String classId = c.getIdentifier();
@@ -504,6 +611,13 @@ public class ParseInterface extends JFrame{
 	}
 	
 	
+	/**
+	 * Scan file.
+	 *
+	 * @param f the f
+	 * @return the string
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static String scanFile(File f) throws IOException
 	{
 		  BufferedReader br = new BufferedReader(new FileReader(f)); 
@@ -516,6 +630,11 @@ public class ParseInterface extends JFrame{
 		  return inputFile.replace(" \n", "\n");
 	}
 	
+	/**
+	 * Choose file.
+	 *
+	 * @return the file
+	 */
 	//open a window dialog
 	public File chooseFile() 
 	{

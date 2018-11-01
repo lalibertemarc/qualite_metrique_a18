@@ -16,17 +16,32 @@ import packageModels.Operation;
 import packageModels.ParsingError;
 import packageModels.Role;
 
+/**
+ * The Class Parser.
+ * Main Class for the parser
+ */
 public class Parser {
+	
+	/** The main file. */
 	static String _mainFile;
+	
+	/** The is file corrupt. */
 	static boolean isFileCorrupt;
+	
+	/** The message. */
 	static String message;
+	
+	/** The output model. */
 	static Model outputModel;
 	
-	/*TODO
-	 * redo regex for no attributes
-	 * 
-	 * */
 	
+	/**
+	 * Gets the model. Main method of Parser.
+	 * See this method as the root of the Parser tree. 
+	 *
+	 * @param input the input
+	 * @return the model
+	 */
 	public static Modelable getModel(String input)
 	{
 		if(input.length()==0){
@@ -74,6 +89,11 @@ public class Parser {
 
 
 
+	/**
+	 * Gets the model id.
+	 *
+	 * @return the model id
+	 */
 	private static String getModelId() {
 		Pattern modelPattern = Pattern.compile("MODEL (.*)\n");
 		Matcher matcher = modelPattern.matcher(_mainFile);
@@ -100,6 +120,11 @@ public class Parser {
 		return id;
 	}
 	
+	/**
+	 * Gets the classes.
+	 *
+	 * @return the classes
+	 */
 	private static List<Class_dec> getClasses()
 	{
 		List<Class_dec> output = new ArrayList<Class_dec>();
@@ -150,6 +175,13 @@ public class Parser {
 		return output;
 	}
 	
+	/**
+	 * Check for class duplicates.
+	 *
+	 * @param output the output
+	 * @param id the id
+	 * @return true, if there is no class duplicates
+	 */
 	private static boolean checkForClassDuplicates(List<Class_dec> output, String id) {
 		
 		for(int i=0;i<output.size();i++)
@@ -161,6 +193,12 @@ public class Parser {
 	}
 
 
+	/**
+	 * Gets the subclasses.
+	 *
+	 * @param id the id
+	 * @return the subclasses
+	 */
 	private static List<String> getSubclasses(String id) {
 		List<String> output = new ArrayList<String>();
 		String regex = "GENERALIZATION "+id+"\\n(.*)SUBCLASSES(.*)\\n;";
@@ -194,6 +232,12 @@ public class Parser {
 	}
 
 	
+	/**
+	 * Gets the class attributes.
+	 *
+	 * @param id the id
+	 * @return the class attributes
+	 */
 	private static List<Data_Item> getClassAttributes(String id) {
 		List<Data_Item> output = new ArrayList<Data_Item>();
 		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS";
@@ -214,6 +258,12 @@ public class Parser {
 		return output;
 	}
 	
+	/**
+	 * Gets the class operations.
+	 *
+	 * @param id the id
+	 * @return the class operations
+	 */
 	private static List<Operation> getClassOperations(String id) {
 		List<Operation> output = new ArrayList<Operation>();
 		String regex = "CLASS "+ id + "\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS\\n((.+\\n)+)";
@@ -258,6 +308,12 @@ public class Parser {
 		return output;
 	}
 
+	/**
+	 * Gets the op args.
+	 *
+	 * @param string the string
+	 * @return the op args
+	 */
 	private static List<Data_Item> getOpArgs(String string) {
 		String regex = "\\((.*?)\\)";
 		Pattern opArgsPattern = Pattern.compile(regex);
@@ -280,6 +336,12 @@ public class Parser {
 	}
 
 	
+	/**
+	 * Gets the data item.
+	 *
+	 * @param input the input
+	 * @return the data item
+	 */
 	private static Data_Item getDataItem(String input)
 	{
 		Data_Item attribute = new Data_Item();
@@ -297,6 +359,12 @@ public class Parser {
 		return attribute;
 	}
 	
+	/**
+	 * Gets the class detail.
+	 *
+	 * @param id the id
+	 * @return the class detail
+	 */
 	private static String getClassDetail(String id)
 	{
 		String regex = "CLASS "+ id+"\\nATTRIBUTES\\n((.+\\n)+)OPERATIONS\\n((.+\\n)+)";
@@ -312,6 +380,11 @@ public class Parser {
 		return details;	
 	}
 	
+	/**
+	 * Gets the associations.
+	 *
+	 * @return the associations
+	 */
 	private static List<Association> getAssociations()
 	{
 		String regex = "RELATION (.*)\\n(.*)\\n(.*)\\n(.*)\\n";
@@ -349,6 +422,13 @@ public class Parser {
 		return output;
 	}
 	
+	/**
+	 * Sets the class associations.
+	 *
+	 * @param assoId the association id
+	 * @param role1 the role 1
+	 * @param role2 the role 2
+	 */
 	private static void setClassAssociations(String assoId, Role role1, Role role2) {
 		
 		String name1 = role1.getClass_dec();
@@ -372,6 +452,12 @@ public class Parser {
 	}
 
 
+	/**
+	 * Gets the role.
+	 *
+	 * @param input the input
+	 * @return the role
+	 */
 	private static Role getRole(String input)
 	{
 		String regex = "CLASS (.*) (.*)";
@@ -398,6 +484,12 @@ public class Parser {
 	}
 
 	
+	/**
+	 * Gets the multiplicity.
+	 *
+	 * @param input the input
+	 * @return the multiplicity
+	 */
 	private static Multiplicity getMultiplicity(String input) {
 		
 		switch(input)
@@ -417,6 +509,11 @@ public class Parser {
 		}
 	}
 	
+	/**
+	 * Gets the aggregations.
+	 *
+	 * @return the aggregations
+	 */
 	private static List<Aggregation> getAggregations() {
 		String regex = "AGGREGATION(.*)\\n(.*)\\n(.*)\\n(.*)\\n(.*)\\n;";
 		Pattern aggPattern = Pattern.compile(regex);
@@ -437,6 +534,12 @@ public class Parser {
 	
 
 
+	/**
+	 * Find class by id.
+	 *
+	 * @param name the name
+	 * @return the class dec
+	 */
 	//helper classes
 	public static Class_dec findClassById(String name)
 	{
@@ -450,6 +553,11 @@ public class Parser {
 		return null;
 	}
 	
+	/**
+	 * Gets the all classes.
+	 *
+	 * @return the all classes
+	 */
 	public static List<Class_dec> getAllClasses()
 	{
 		return outputModel.getList_dec();

@@ -10,9 +10,20 @@ import org.junit.Test;
 import packageModels.*;
 import parsingUI.ParseInterface;
 
+/**
+ * The Class ParserTest.
+ * Unit tests for the project
+ */
 public class ParserTest {
+
+/** The path. */
 private String path = "testFiles/";
 	
+	/**
+	 * Empty file.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void emptyFile() throws IOException
 	{
@@ -29,6 +40,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Empty model name.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void emptyModelName() throws IOException
 	{
@@ -45,6 +61,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Empty class name.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void emptyClassName() throws IOException
 	{
@@ -61,6 +82,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Dupe class dec.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void dupeClassDec() throws IOException
 	{
@@ -77,6 +103,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * No class dec.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void noClassDec() throws IOException
 	{
@@ -94,6 +125,11 @@ private String path = "testFiles/";
 	}
 	
 
+	/**
+	 * No sub class.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void noSubClass() throws IOException
 	{
@@ -110,6 +146,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Malformed ops missing type.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void malformedOpsMissingType() throws IOException
 	{
@@ -126,6 +167,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Malformed ops missing name.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void malformedOpsMissingName() throws IOException
 	{
@@ -142,6 +188,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Malformed ops missing semi colon.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void malformedOpsMissingSemiColon() throws IOException
 	{
@@ -158,6 +209,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Malformed data missing type.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void malformedDataMissingType() throws IOException
 	{
@@ -174,6 +230,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Malformed data missing name.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void malformedDataMissingName() throws IOException
 	{
@@ -190,6 +251,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Not existing multiplicity.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void notExistingMultiplicity() throws IOException
 	{
@@ -206,6 +272,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Malformed role.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void malformedRole() throws IOException
 	{
@@ -222,6 +293,11 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	/**
+	 * Good model parsing.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	public void goodModelParsing() throws IOException
 	{
