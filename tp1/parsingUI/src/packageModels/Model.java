@@ -25,7 +25,7 @@ public class Model implements Modelable {
 	private List<Aggregation> aggregations;
 	
 	/** The sub class details. */
-	private String subClassDetails;
+	private List<String> subClassDetails = new ArrayList<String>();
 	
 	/** The super class details. */
 	private String superClassDetails;
@@ -96,7 +96,7 @@ public class Model implements Modelable {
 	 *
 	 * @param sc the new sub class details
 	 */
-	public void setSubClassDetails(String sc)
+	public void setSubClassDetails(List<String> sc)
 	{
 		subClassDetails = sc;
 	}
@@ -106,7 +106,7 @@ public class Model implements Modelable {
 	 *
 	 * @return the sub class details
 	 */
-	public String getSubClassDetails()
+	public List<String> getSubClassDetails()
 	{
 		return subClassDetails;
 	}
@@ -116,7 +116,7 @@ public class Model implements Modelable {
 	 *
 	 * @param sc the new super class details
 	 */
-	public void setSuperClassDetails(String sc)
+	public void setSuperClassDetails(List<String> sc)
 	{
 		subClassDetails = sc;
 	}
