@@ -307,7 +307,16 @@ public class ParseInterface extends JFrame{
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				adapterDetails.clear();
-				adapterDetails.addElement(((Model)mainModel).getSubClassDetails());
+				String classId = selectedClass.getIdentifier();
+				for(int i=0;i<((Model)mainModel).getSubClassDetails().size();i++)
+				{
+					String element = ((Model)mainModel).getSubClassDetails().get(i);
+					String[] toScan = element.split("SUBCLASSES");
+					if(toScan[0].contains(" "+classId))
+					{
+						adapterDetails.addElement(((Model)mainModel).getSubClassDetails().get(i));
+					}
+				}
 			}
 			
 		});
@@ -388,7 +397,32 @@ public class ParseInterface extends JFrame{
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				// TODO Auto-generated method stub
+				adapterDetails.clear();
+				int i = jListMetrics.getSelectedIndex();
+				if(i==-1)
+					return;
+				String metric = adapterMetrics.getElementAt(i);
+				
+				if(metric.contains("ANA"))
+					adapterDetails.addElement("<html>Nombre moyen d’arguments des méthodes locales pour la classe ci.");
+				if(metric.contains("NOM"))
+					adapterDetails.addElement("<html>Nombre de méthodes locales/héritées de la classe ci.");
+				if(metric.contains("NOA"))
+					adapterDetails.addElement("<html>Nombre d’attributs locaux/hérités de la classe ci.");
+				if(metric.contains("ITC"))
+					adapterDetails.addElement("<html>Nombre de fois où d’autres classes du diagramme apparaissent<br> comme types des arguments des méthodes de ci.</html>");
+				if(metric.contains("ETC"))
+					adapterDetails.addElement("<html>Nombre de fois où ci apparaît comme type des arguments dans<br> les méthodes des autres classes du diagramme.</html>");
+				if(metric.contains("CAC"))
+					adapterDetails.addElement("<html>Nombre d’associations (incluant les agrégations) locales/héritées<br> auxquelles participe une classe ci.</html>");
+				if(metric.contains("DIT"))
+					adapterDetails.addElement("<html>Taille du chemin le plus long reliant une classe ci à une classe<br> <b>racine</b> dans le graphe d’héritage.</html>");
+				if(metric.contains("CLD"))
+					adapterDetails.addElement("<html>Taille du chemin le plus long reliant une classe ci à une classe <br><b>feuille</b> dans le graphe d’héritage.</html>");
+				if(metric.contains("NOC"))
+					adapterDetails.addElement("Nombre de sous-classes directes de ci.");
+				if(metric.contains("NOD"))
+					adapterDetails.addElement("Nombre de sous-classes directes et indirectes de ci.");
 				
 			}
 			

@@ -214,14 +214,14 @@ public class Parser {
 				return null;
 				
 			}
-			
-			outputModel.setSubClassDetails("<html>"+matcher.group().replaceAll("\n","<br>")+"</html>");
+			String details = "<html>"+matcher.group().replaceAll("\n","<br>")+"</html>";
+			outputModel.getSubClassDetails().add(details);
 			
 			String[] classes = matcher.group(2).split(", ");
 			if (classes.length>0) {
 				for(int i = 0 ;i<classes.length;i++)
 				{
-					output.add(classes[i]);
+					output.add(classes[i].replace(" ", ""));
 				}
 			}	
 		}
