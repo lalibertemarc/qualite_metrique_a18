@@ -249,16 +249,6 @@ public class Class_dec implements Modelable,Metricable {
 		isSuperClass=b;
 	}
 	
-	/**
-	 * Checks for aggregation.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean hasAggregation() {
-		// TODO - implement Class_dec.hasAggregation
-		return false;
-		//throw new UnsupportedOperationException();
-	}
 
 	/**
 	 * Instantiates a new class dec.
@@ -527,7 +517,6 @@ public class Class_dec implements Modelable,Metricable {
 	//CAC 6
 	@Override
 	public int getAssociationCount() {
-		// TODO Auto-generated method stub
 		int count = 0;
 		int countAsso = 0;
 		int countAggr = 0;
@@ -564,6 +553,7 @@ public class Class_dec implements Modelable,Metricable {
 	/* (non-Javadoc)
 	 * @see packageModels.Metricable#getLongestPathLengthtoLeaf()
 	 */
+	
 	//CLD 8
 	@Override
 	public int getLongestPathLengthtoLeaf() {
