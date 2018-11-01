@@ -1,89 +1,177 @@
 package packageModels;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Class Model.
+ * Represents the whole class diagram.
+ */
 public class Model implements Modelable {
 
+	/** The identifier. */
 	private String identifier;
+	
+	/** The details. */
 	private String details;
+	
+	/** The list dec. */
 	private List<Class_dec> list_dec;
+	
+	/** The associations. */
 	private List<Association> associations;
+	
+	/** The aggregations. */
 	private List<Aggregation> aggregations;
+	
+	/** The sub class details. */
 	private String subClassDetails;
+	
+	/** The super class details. */
 	private String superClassDetails;
 
+	/**
+	 * Gets the list dec.
+	 *
+	 * @return the list dec
+	 */
 	public List<Class_dec> getList_dec() {
 		return this.list_dec;
 	}
 
+	/**
+	 * Sets the list dec.
+	 *
+	 * @param list_dec the new list dec
+	 */
 	public void setList_dec(List<Class_dec> list_dec) {
 		this.list_dec = list_dec;
 	}
 
+	/**
+	 * Gets the associations.
+	 *
+	 * @return the associations
+	 */
 	public List<Association> getAssociations() {
 		return this.associations;
 	}
 
+	/**
+	 * Sets the associations.
+	 *
+	 * @param associations the new associations
+	 */
 	public void setAssociations(List<Association> associations) {
 		this.associations = associations;
 	}
 
+	/**
+	 * Gets the aggregations.
+	 *
+	 * @return the aggregations
+	 */
 	public List<Aggregation> getAggregations() {
 		return this.aggregations;
 	}
 
+	/**
+	 * Sets the aggregations.
+	 *
+	 * @param aggregations the new aggregations
+	 */
 	public void setAggregations(List<Aggregation> aggregations) {
 		this.aggregations = aggregations;
 	}
 
+	/**
+	 * Instantiates a new model.
+	 */
 	public Model() {
 	}
 	
 	
+	/**
+	 * Sets the sub class details.
+	 *
+	 * @param sc the new sub class details
+	 */
 	public void setSubClassDetails(String sc)
 	{
 		subClassDetails = sc;
 	}
 	
+	/**
+	 * Gets the sub class details.
+	 *
+	 * @return the sub class details
+	 */
 	public String getSubClassDetails()
 	{
 		return subClassDetails;
 	}
+	
+	/**
+	 * Sets the super class details.
+	 *
+	 * @param sc the new super class details
+	 */
 	public void setSuperClassDetails(String sc)
 	{
 		subClassDetails = sc;
 	}
 	
+	/**
+	 * Gets the super class details.
+	 *
+	 * @return the super class details
+	 */
 	public String getSuperClassDetails()
 	{
 		return superClassDetails;
 	}
 	
+	/* (non-Javadoc)
+	 * @see packageModels.Modelable#getIdentifier()
+	 */
 	@Override
 	public String getIdentifier() {
 		return identifier;
 	}
 
+	/* (non-Javadoc)
+	 * @see packageModels.Modelable#getDetails()
+	 */
 	@Override
 	public String getDetails() {
 		return details;
 	}
 
+	/* (non-Javadoc)
+	 * @see packageModels.Modelable#setIdentifier(java.lang.String)
+	 */
 	@Override
 	public void setIdentifier(String id) {
 		identifier=id;
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see packageModels.Modelable#setDetails(java.lang.String)
+	 */
 	@Override
 	public void setDetails(String details) {
 		this.details=details;
 		
 	}
 	
-	public void getSubClass() {
+	/**
+	 * Converts the string subclass list in
+	 * class_d
+	 *
+	 * 
+	 */
+	public void SetAllSubClasses() {
 		List<String> subclasses=new ArrayList<String>();
 		List<Class_dec> sc = new ArrayList<Class_dec>();
 		for(int i=0 ; i<this.list_dec.size() ;i++)
@@ -103,7 +191,10 @@ public class Model implements Modelable {
 		}	
 	}
 	
-	public void setSubClasses(){
+	/**
+	 * Sets the sub classes flags for all class_dec.
+	 */
+	public void setSubClassesFlags(){
 		for(int i=0 ; i<this.list_dec.size() ;i++)
 		{
 			if(this.list_dec.get(i).getSubclasses()!=null)
@@ -126,7 +217,11 @@ public class Model implements Modelable {
 		}
 	}
 	
-	public void getAllClassesTypes() {
+	/**
+	 * Sets the all classes types.
+	 *
+	 */
+	public void setAllClassesTypes() {
 		List<String> s = new ArrayList<String>();
 		for(int i=0 ; i<this.list_dec.size() ;i++)
 		{
@@ -140,6 +235,9 @@ public class Model implements Modelable {
 		}
 	}
 	
+	/**
+	 * Sets the other operations.
+	 */
 	public void setOtherOperations() {
 		List<Operation> op = new ArrayList<Operation>();
 		for(int i=0; i<this.list_dec.size() ;i++) {
@@ -155,6 +253,9 @@ public class Model implements Modelable {
 		}	
 	}
 	
+	/**
+	 * Sets the aggregations.
+	 */
 	public void setAggregations(){
 		boolean condition1 = false;
 		boolean condition2 = false;
