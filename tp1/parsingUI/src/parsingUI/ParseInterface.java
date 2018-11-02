@@ -4,8 +4,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -43,7 +45,7 @@ public class ParseInterface extends JFrame{
 	private JButton selectFile = new JButton("Load File");
 	
 	/** The calc metric. */
-	private JButton calcMetric = new JButton("Calculate Metrics");
+	private JButton calcMetric = new JButton("Save CSV");
 	
 	/** The classes panel container. */
 	private PanelContainer classesPanelContainer = new PanelContainer("Classes");
@@ -136,6 +138,9 @@ public class ParseInterface extends JFrame{
 	
 	/** The all model list. */
 	ArrayList<DefaultListModel<String>> allModelList = new ArrayList<DefaultListModel<String>>();
+	
+	/** The mainFile used for UI */
+	File mainFile;
 
 	/**
 	 * Instantiates a new Parser Interface.
@@ -144,7 +149,6 @@ public class ParseInterface extends JFrame{
 
 		//basic appearance 
 		this.setTitle("Parseur");
-		//this.setPreferredSize(new Dimension(800, 800));
 		this.setSize(1050, 800);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -207,11 +211,53 @@ public class ParseInterface extends JFrame{
 			}
 		});
 
-		calcMetric.addActionListener( new ActionListener() {
-
+		calcMetric.addActionListener( new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				
+				String csvFile = "Nom de Classe, ANA, NOM, NOA, ITC, ETC, CAC, DIT, CLD, NOC, NOD\n";
+				csvFile += selectedClass.getIdentifier()+", ";
+				csvFile += selectedClass.getAverageMethodArgumentCount()+", ";
+				csvFile += selectedClass.getMethodCount()+", ";
+				csvFile += selectedClass.getAttributeCount()+", ";
+				csvFile += selectedClass.getModelableArgumentCount()+", ";
+				csvFile += selectedClass.getTimesUsedAsArgument()+", ";
+				csvFile += selectedClass.getAssociationCount()+", ";
+				csvFile += selectedClass.getLongestPathLengthToRoot()+", ";
+				csvFile += selectedClass.getLongestPathLengthtoLeaf()+", ";
+				csvFile += selectedClass.getDirectSubClassCount()+", ";
+				csvFile += selectedClass.getSubClassCount()+", ";
+				
+				//String fileName = selectedClass.getIdentifier()+"Metrics.csv";
+				String fileName = mainFile.getParent()+ "/"+selectedClass.getIdentifier()+"Metrics.csv";
+				
+				BufferedWriter bw = null;
+				FileWriter fw = null;
+
+				try {
+
+					String content = csvFile;
+					fw = new FileWriter(fileName);
+					bw = new BufferedWriter(fw);
+					bw.write(content);
+
+				} catch (IOException er) {
+
+					er.printStackTrace();
+
+				} finally {
+					try {
+						if (bw != null)
+							bw.close();
+						if (fw != null)
+							fw.close();
+						new JOptionPane();
+						JOptionPane.showMessageDialog(null, "File saved in same directory as your ucd file", "Completed", JOptionPane.PLAIN_MESSAGE);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}
+				
 				
 			}
 			
@@ -475,6 +521,7 @@ public class ParseInterface extends JFrame{
 		allList.add(jListDetails);
 		allList.add(jListMethods);
 		allList.add(jListSubClass);
+		allList.add(jListMetrics);
 		
 		allModelList.add(adatperClassDec);
 		allModelList.add(adapterAggregetionsAssociations);
@@ -482,6 +529,7 @@ public class ParseInterface extends JFrame{
 		allModelList.add(adapterDetails);
 		allModelList.add(adapterOperations);
 		allModelList.add(adapterSubClasses);
+		allModelList.add(adapterMetrics);
 	}
 
 	/**
@@ -678,11 +726,10 @@ public class ParseInterface extends JFrame{
 		defaultChooser.setAcceptAllFileFilterUsed(false);
 		defaultChooser.setFileFilter(filter);
 		defaultChooser.showOpenDialog(getParent());
-		File fc;
-		
+
 		try {
-			fc = defaultChooser.getSelectedFile();
-			return fc;
+			mainFile = defaultChooser.getSelectedFile();
+			return mainFile;
 		}catch(Exception er)
 		{
 			er.printStackTrace();
@@ -690,5 +737,11 @@ public class ParseInterface extends JFrame{
 		clearAllList();
 		return null;
 	}
+	/**
+	 * Choose path for csv filke.
+	 *
+	 * @return the file
+	 */
+	
 
 }
