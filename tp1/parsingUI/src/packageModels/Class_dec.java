@@ -526,6 +526,7 @@ public class Class_dec implements Modelable,Metricable {
 		{
 			List<String> g = getInheritedGeneralizations(this);
 			List<String> loc = getLocalGeneralizations(this);
+
 			count = g.size()+loc.size();
 		}
 		else 
@@ -611,7 +612,6 @@ public class Class_dec implements Modelable,Metricable {
 				for(int i=0; i<c.subClass.size();i++) {
 					if(c.subClass.get(i).isSuperClass) {
 						count+=numberSubClasses(c.subClass.get(i));
-						System.out.println(count);
 					}
 				}
 			}
@@ -713,17 +713,18 @@ public class Class_dec implements Modelable,Metricable {
 	public static List<Data_Item> getLocalAttributes(Class_dec c){
 		List<Data_Item> att=getInheritedAttributes(c);
 		List<Data_Item> loc = new ArrayList<Data_Item>();
-		loc.addAll(c.getAttributes());
-		
-		for(int i=0; i<loc.size(); i++) {
+			
+		for(int i=0; i<c.getAttributes().size(); i++) {
+			boolean localFlag = true;
 			for (int j=0; j<att.size(); j++) {
-				if(loc.get(i).getIdentifier().equals(att.get(j).getIdentifier())) {
-					System.out.println("indice "+i+" je supprime attribut "+loc.get(i).getIdentifier());
-					loc.remove(i);
+				if(c.getAttributes().get(i).getIdentifier().equals(att.get(j).getIdentifier())) {
+					localFlag = false;
 				}
 			}
+			if(localFlag) {
+				loc.add(c.getAttributes().get(i));
+			}
 		}
-		
 		return loc;
 	}
 	
@@ -734,13 +735,12 @@ public class Class_dec implements Modelable,Metricable {
 	 * @return the local operations
 	 */
 	public static List<Operation> getLocalOperations(Class_dec c){
-		boolean flagLocal = true;
 		List<Operation> op=getInheritedOperations(c);
 		List<Operation> local = new ArrayList<Operation>();
-		local.addAll(c.getOperations());
 		
 		if(op.size()>0) {
 			for(int i=0; i<c.getOperations().size(); i++) {
+				boolean flagLocal = true;
 				for (int j=0; j<op.size(); j++) {
 					if(c.getOperations().get(i).getIdentifier().equals(op.get(j).getIdentifier())) {
 						flagLocal = false;
@@ -811,13 +811,26 @@ public class Class_dec implements Modelable,Metricable {
 	public static List<String> getLocalGeneralizations(Class_dec c){
 		List<String> g = getInheritedGeneralizations(c);
 		List<String> loc = new ArrayList<String>();
-		loc.addAll(c.getAssoList());
-		loc.addAll(c.getAggrList());
+		boolean localFlag =true;
 		
-		for(int i=0; i<loc.size(); i++) {
+		for(int i=0; i<c.getAssoList().size(); i++) {
 			for (int j=0; j<g.size(); j++) {
-				if(loc.get(i).equals(g.get(j))) {
-					loc.remove(i);
+				if(c.getAssoList().get(i).equals(g.get(j))) {
+					localFlag = false;
+				}
+				if(localFlag) {
+					loc.add(c.getAssoList().get(i));
+				}
+			}
+		}
+		localFlag =true;
+		for(int i=0; i<c.getAggrList().size(); i++) {
+			for (int j=0; j<g.size(); j++) {
+				if(c.getAggrList().get(i).equals(g.get(j))) {
+					localFlag = false;
+				}
+				if(localFlag) {
+					loc.add(c.getAggrList().get(i));
 				}
 			}
 		}
