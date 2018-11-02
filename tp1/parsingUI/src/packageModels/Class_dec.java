@@ -40,6 +40,8 @@ public class Class_dec implements Modelable,Metricable {
 	/** The is sub class. */
 	private boolean isSubClass = false;
 	
+	private int numberSubClasses;
+	
 	/** The all classes types. */
 	private List<String> allClassesTypes;
 	
@@ -732,14 +734,20 @@ public class Class_dec implements Modelable,Metricable {
 	 * @return the local operations
 	 */
 	public static List<Operation> getLocalOperations(Class_dec c){
+		boolean flagLocal = true;
 		List<Operation> op=getInheritedOperations(c);
 		List<Operation> local = new ArrayList<Operation>();
 		local.addAll(c.getOperations());
 		
-		for(int i=0; i<local.size(); i++) {
-			for (int j=0; j<op.size(); j++) {
-				if(local.get(i).getIdentifier().equals(op.get(j).getIdentifier())) {
-					local.remove(i);
+		if(op.size()>0) {
+			for(int i=0; i<c.getOperations().size(); i++) {
+				for (int j=0; j<op.size(); j++) {
+					if(c.getOperations().get(i).getIdentifier().equals(op.get(j).getIdentifier())) {
+						flagLocal = false;
+					}
+				}
+				if(flagLocal) {
+					local.add(c.getOperations().get(i));
 				}
 			}
 		}
