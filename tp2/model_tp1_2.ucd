@@ -67,7 +67,14 @@ OPERATIONS
 	getIdentifier : String,
 	getDetails : String,
 	setIdentifier(id : String) : void,
-	setDetails(details : String) : void 
+	setDetails(details : String) : void,
+	setAllSubClasses : void,
+	setSubClassesFlags : void, 
+	setAllClassesType : void,
+	setOtherOperation : void,
+	setAggregations : void,
+	
+
 ;
 
 CLASS Class_dec
@@ -104,7 +111,13 @@ OPERATIONS
 	getDirectSubClassCount : int,
 	getSubClassCount : int,
 	getAllMetrics : List<String>,
-	getMethodArgumentCount : int
+	getMethodArgumentCount : int,
+	getInheritedAttributes (c : Class_dec) : List<Data_Item>,
+	getLocalAttributes (c : Class_dec) : List<Data_Item>,
+	getLocalOperations (c : Class_dec) : List<Operation>,
+	getInheritedOperations (c : Class_dec) : List<Operation>,
+	getLocalGeneralizations (c : Class_dec) : List<String>,
+	getInheritedGeneralizations (c : Class_dec) : List<String>,
 ;
 
 CLASS Operation
@@ -223,7 +236,9 @@ OPERATIONS
 	getMultiplicity(input : String) : Multiplicity,
 	getAggregations : List<Aggregation>,
 	findClassById(name : String) : Class_dec,
-	getAllClasses : List<Class_dec>
+	getAllClasses : List<Class_dec>,
+	scanForSubClass(name : String) : boolean,
+	getParentClass(name : String) : Class_dec
 ;
 
 CLASS ParseInterface

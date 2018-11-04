@@ -3,6 +3,8 @@ package packageModels;
 import java.util.ArrayList;
 import java.util.List;
 
+import testParsing.Parser;
+
 /**
  * The Class Class_dec.
  */
@@ -549,8 +551,14 @@ public class Class_dec implements Modelable,Metricable {
 	//DIT 7
 	@Override
 	public int getLongestPathLengthToRoot() {
-		// TODO Auto-generated method stub
-		return 0;
+		if(!Parser.scanForSubClass(this.identifier))
+			return 0;
+		else
+		{
+			Class_dec parentClass = Parser.getParentClass(this.identifier);
+			return parentClass.getLongestPathLengthToRoot()+1;
+			
+		}
 	}
 
 	/* (non-Javadoc)
@@ -560,8 +568,24 @@ public class Class_dec implements Modelable,Metricable {
 	//CLD 8
 	@Override
 	public int getLongestPathLengthtoLeaf() {
-		// TODO Auto-generated method stub
-		return 0;
+		int maxPathToLeaf =0;
+		if(subclasses == null)
+			return 0;
+		if(this.subclasses != null && this.subclasses.size() == 0)
+			return 0;
+		if(this.subclasses != null && this.subclasses.size() > 0)
+		{
+			
+			for(int i=0;i<subclasses.size();i++)
+			{
+				int currentMax = 1;
+				
+				currentMax += subClass.get(i).getLongestPathLengthtoLeaf();
+				if(currentMax>maxPathToLeaf)
+					maxPathToLeaf = currentMax;
+			}
+		}
+		return maxPathToLeaf;
 	}
 
 	/* (non-Javadoc)
@@ -583,12 +607,23 @@ public class Class_dec implements Modelable,Metricable {
 	//NOD 10
 	@Override
 	public int getSubClassCount() {
-		// TODO Auto-generated method stub
-		int count = 0;
-		//if(this.isSuperClass) {
-			//count=numberSubClasses(this);
-		//}	
-		return count;
+		int allSubclasses = 0;
+		if(subclasses == null)
+			return 0;
+		if(this.subclasses != null && this.subclasses.size() == 0)
+			return 0;
+		if(this.subclasses != null && this.subclasses.size() > 0)
+		{
+			for(int i=0;i<subclasses.size();i++)
+			{
+				Class_dec currentClass = Parser.findClassById(subclasses.get(i));
+				if(currentClass.getSubClassCount()==0)
+					allSubclasses +=1;
+				else
+					allSubclasses += currentClass.getSubClassCount()+1;
+			}
+		}
+		return allSubclasses;
 	}
 	
 
