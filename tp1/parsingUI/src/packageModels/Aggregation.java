@@ -62,7 +62,6 @@ public class Aggregation implements Modelable{
 	 */
 	@Override
 	public String getIdentifier() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -79,7 +78,7 @@ public class Aggregation implements Modelable{
 	 */
 	@Override
 	public void setIdentifier(String id) {
-		// TODO Auto-generated method stub
+		//do nothing
 		
 	}
 

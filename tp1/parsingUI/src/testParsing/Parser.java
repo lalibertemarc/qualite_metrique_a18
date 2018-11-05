@@ -537,7 +537,7 @@ public class Parser {
 	/**
 	 * Find class by id.
 	 *
-	 * @param name the name
+	 * @param name of the class
 	 * @return the class dec
 	 */
 	//helper classes
@@ -548,6 +548,51 @@ public class Parser {
 			if(outputModel.getList_dec().get(i).getIdentifier().equals(name))
 			{
 				return outputModel.getList_dec().get(i);
+			}
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Returns true if the requested class name is subclass to another
+	 *
+	 * @param name of the requested class
+	 * @return either the requested class name is subClass to another
+	 */
+	public static boolean scanForSubClass(String name)
+	{
+		for(int i=0 ; i<outputModel.getList_dec().size() ;i++)
+		{
+			Class_dec currentClass = outputModel.getList_dec().get(i);
+			if(currentClass.getSubclasses()==null)
+				continue;
+			for(int j=0; j<currentClass.getSubclasses().size();j++)
+			{
+				if(currentClass.getSubclasses().get(j).equals(name))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * gets the parentClass of the requested class name id
+	 *
+	 * @param name of the requested class
+	 * @return parent class_dec
+	 */
+	public static Class_dec getParentClass(String name)
+	{
+		for(int i=0 ; i<outputModel.getList_dec().size() ;i++)
+		{
+			Class_dec currentClass = outputModel.getList_dec().get(i);
+			if(currentClass.getSubclasses()==null)
+				continue;
+			for(int j=0; j<currentClass.getSubclasses().size();j++)
+			{
+				if(currentClass.getSubclasses().get(j).equals(name))
+					return currentClass;
 			}
 		}
 		return null;

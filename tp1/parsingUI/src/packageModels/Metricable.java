@@ -102,10 +102,5 @@ public interface Metricable {
 	 */
 	//helpers
 	int getMethodArgumentCount();
-	
-	
-	
-	
-	
 
 }

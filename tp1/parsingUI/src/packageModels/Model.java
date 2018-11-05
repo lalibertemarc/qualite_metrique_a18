@@ -275,9 +275,7 @@ public class Model implements Modelable {
 				this.list_dec.get(i).setAggrList(agg);
 				this.list_dec.get(i).setAggrFlag(true);
 			}
-			
 	
-			
 		}
 	}
 	
