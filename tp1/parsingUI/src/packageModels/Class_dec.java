@@ -585,9 +585,9 @@ public class Class_dec implements Modelable,Metricable {
 	public int getSubClassCount() {
 		// TODO Auto-generated method stub
 		int count = 0;
-		//if(this.isSuperClass) {
-			//count=numberSubClasses(this);
-		//}	
+		if(this.isSuperClass) {
+			count=numberSubClasses(this);
+		}	
 		return count;
 	}
 	
@@ -604,20 +604,15 @@ public class Class_dec implements Modelable,Metricable {
 			count=0;
 		}
 		else {
-			if(c.subClass.size()==1) {
-				count = c.subClass.size();
-				c =null;
-			}
-			else {
 				for(int i=0; i<c.subClass.size();i++) {
 					if(c.subClass.get(i).isSuperClass) {
 						count+=numberSubClasses(c.subClass.get(i));
 					}
 				}
-			}
-			
-			//count+=c.subClass.size();
+				
+			count+=c.subClass.size();
 		}
+		System.out.println("le count pour la classe "+ c.getIdentifier()+" est "+count);
 		return count;
 	}
 	
