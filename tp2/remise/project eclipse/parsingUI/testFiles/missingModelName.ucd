@@ -1,0 +1,18 @@
+MODEL
+CLASS Equipe 
+ATTRIBUTES 
+      nom_equipe : String
+OPERATIONS
+      nombre_joueurs() : Integer,
+      entraineur() : String,
+      add_joueur(element : Joueur) : void
+;
+
+CLASS Equipe 
+ATTRIBUTES 
+      nom_equipe : String
+OPERATIONS
+      nombre_joueurs() : Integer,
+      entraineur() : String,
+      add_joueur(element : Joueur) : void
+;
