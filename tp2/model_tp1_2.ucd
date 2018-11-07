@@ -73,7 +73,6 @@ OPERATIONS
 	setAllClassesType : void,
 	setOtherOperation : void,
 	setAggregations : void,
-	
 
 ;
 
@@ -117,7 +116,7 @@ OPERATIONS
 	getLocalOperations (c : Class_dec) : List<Operation>,
 	getInheritedOperations (c : Class_dec) : List<Operation>,
 	getLocalGeneralizations (c : Class_dec) : List<String>,
-	getInheritedGeneralizations (c : Class_dec) : List<String>,
+	getInheritedGeneralizations (c : Class_dec) : List<String>
 ;
 
 CLASS Operation
