@@ -289,7 +289,6 @@ public class Parser {
 				{
 					name = opMatcher.group(1).replace("     ", "");
 					type = opMatcher.group(2).replace(",", "");
-					System.out.println(name);
 				}
 				
 				if(name.equals("") || type.equals("") || name.equals(" ") || type.equals(" "))

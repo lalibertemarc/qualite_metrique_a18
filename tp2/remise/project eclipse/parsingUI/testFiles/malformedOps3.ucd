@@ -1,9 +1,0 @@
-MODEL Ligue
-CLASS Equipe 
-ATTRIBUTES 
-      nom_equipe : String
-OPERATIONS
-      nombre_joueurs()  int,
-      entraineur() : String,
-      add_joueur(element : Joueur) : void
-;

@@ -215,6 +215,21 @@ public class ParseInterface extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				if(mainFile == null)
+				{
+					new JOptionPane();
+					JOptionPane.showMessageDialog(null, "Please select a file then select a class", "Alert", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
+				if(selectedClass==null)
+				{
+					new JOptionPane();
+					JOptionPane.showMessageDialog(null, "Please select a class", "Alert", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+					
+				
 				String csvFile = "Nom de Classe, ANA, NOM, NOA, ITC, ETC, CAC, DIT, CLD, NOC, NOD\n";
 				csvFile += selectedClass.getIdentifier()+", ";
 				csvFile += selectedClass.getAverageMethodArgumentCount()+", ";
@@ -228,7 +243,6 @@ public class ParseInterface extends JFrame{
 				csvFile += selectedClass.getDirectSubClassCount()+", ";
 				csvFile += selectedClass.getSubClassCount()+", ";
 				
-				//String fileName = selectedClass.getIdentifier()+"Metrics.csv";
 				String fileName = mainFile.getParent()+ "/"+selectedClass.getIdentifier()+"Metrics.csv";
 				
 				BufferedWriter bw = null;
