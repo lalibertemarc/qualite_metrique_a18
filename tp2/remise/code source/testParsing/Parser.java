@@ -159,6 +159,12 @@ public class Parser {
 			newClass.setDetails(getClassDetail(id));
 			newClass.setAttributes(getClassAttributes(id));
 			newClass.setOperations(getClassOperations(id));
+			if(newClass.getAttributes().size()==0 && newClass.getOperations().size()==0)
+			{
+				isFileCorrupt = true;
+				message="Class is empty";
+				return null;
+			}
 			newClass.setSubclasses(getSubclasses(id));
 			
 			output.add(newClass);

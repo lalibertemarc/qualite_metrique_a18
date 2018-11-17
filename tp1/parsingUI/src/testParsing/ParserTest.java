@@ -82,6 +82,21 @@ private String path = "testFiles/";
 		assertEquals(((ParsingError)model).getMessage(),message);
 	}
 	
+	@Test
+	public void emptyClass() throws IOException
+	{
+		//Arrange
+		File file = new File(path+"emptyClass.ucd");
+		String input = ParseInterface.scanFile(file);
+		String message="Class is empty";
+		
+		//Act
+		Modelable model = Parser.getModel(input);
+		
+		//Assert
+		assertTrue(model instanceof ParsingError);
+		assertEquals(((ParsingError)model).getMessage(),message);
+	}
 	/**
 	 * Dupe class dec.
 	 *

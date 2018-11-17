@@ -6,5 +6,4 @@
 -   La javadoc va être dans le dossier javadoc, ouvrir index.html pour consulter.
 -   Toutes les métriques se trouvent dans le dossier métrique : metricsEclipseOuput.xml est le fichier que nous donne Eclipse pour toutes les métriques importantes. métriques de classes contient les fichiers csv générés par notre programme sur demande. métriques du programme est le csv principal qui décrit tout le programme demandé par l'énoncé.
 -   Nos fichiers de test sont dans le dossier fichiers de test.
--   Le projet Eclipse est fourni au complet dans le dossier projet eclipse
 -   Les fichiers qui se trouve dans le dossier principal sont donc le jpg du diagramme de classe, le .ucd de notre programme, le jar executable de notre programme ainsi que le rapport.
